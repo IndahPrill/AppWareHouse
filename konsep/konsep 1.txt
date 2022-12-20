@@ -1,0 +1,29 @@
+pada form permintaan barang ada dua jenis pilihan yaitu :
+Barang mentah (BMM.tanggal.nomor) : tanggal, nama, kategori, ukuran, jumlah, keterangan
+Barang Jadi (BSJ.tanggal.nomor): tanggal, nama, kategori,
+
+
+
+produksi membuat permintaan barang
+gudang melakukan persetujuan atau approval atas permintaan barang dari produksi
+
+
+Barang mentah -> kayu 1
+		  -> kayu 2
+
+Barang jadi   -> sofa
+		  -> meja
+
+Barang mentah -> kayu 1
+		  -> kayu 2
+
+
+Barang jadi   -> sofa
+		  -> meja
+
+Barang mentah -> kayu 1
+		  -> kayu 2
+
+
+Barang jadi   -> sofa
+		  -> meja
