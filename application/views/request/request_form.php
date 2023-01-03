@@ -1,8 +1,5 @@
 <section class="content-header">
-    <h1>
-        Request
-        <small>Permintaan Barang</small>
-    </h1>
+    <h1>Request <small>Permintaan Barang</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
         <li class="active">Request</li>

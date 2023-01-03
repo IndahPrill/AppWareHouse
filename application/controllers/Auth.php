@@ -18,34 +18,43 @@ class Auth extends CI_Controller {
 	public function process()
 	{
 		$post = $this->input->post(null, TRUE);
-		if(isset($post['login'])) {
-			$query= $this->user_m->login($post);
+		if (isset($post['login'])) {
+			$query = $this->user_m->login($post);
 			// print_r($query); die();
-			if($query->num_rows() > 0){
-				$row = $query->row();
-				$params = array(
-					'userid' => $row->user_id,
-					'level' => $row->level
-				);
-				$this->session->set_userdata($params);
-				$this->session->set_flashdata('notif', 'Login Berhasil');
-				redirect(base_url() . "dashboard/index");
+			if ($query) {
+				$this->session->set_flashdata('success', 'Login Berhasil');
+				$data['title'] = "Dashboard";
+				$this->template->load('template', 'dashboard', $data);
 				// echo "<script>
 				// alert('Login berhasil'); window.location ='".site_url('dashboard')."';
 				// </script>";
-			} else{
-				$this->session->set_flashdata('notif', 'Password atau username salah');
-				redirect(base_url() . "auth/login");
+			} else {
+				$this->session->set_flashdata('error', 'Password atau username salah');
+				$this->load->view('login');
 				// echo "<script>
 				// alert('Password atau username salah'); window.location ='".site_url('auth/login')."';
 				// </script>";
 			}
+		} else {
+			$this->session->set_flashdata('error', 'Gagal Login');
+			$this->load->view('login');
 		}
 	}
 
 	public function logout()
 	{
-		$params = array('userid', 'level');
+		$username   =   $this->session->userdata('username');
+        $this->user_m->logout($username);
+        $this->session->set_flashdata('notif', 'Loguot Berhasil, Terima Kasih');
+		$params = array(
+			'user_id',
+			'username',
+			'nama',
+			'level',
+			'is_active',
+			'date_login',
+			'status_login',
+		);
 		$this->session->unset_userdata($params);
 		redirect('auth/login');
 	}

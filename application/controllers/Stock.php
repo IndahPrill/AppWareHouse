@@ -13,12 +13,14 @@ class Stock extends CI_Controller {
 
     public function stock_in_data()
     {
+        $data['title'] = "Stock In";
         $data['row'] = $this->stock_m->get_stock_in()->result();
         $this->template->load('template', 'stock_in/stock_in_data', $data);
     }
 
     public function stock_out_data()
     {
+        $data['title'] = "Stock Out";
         $data['row'] = $this->stock_m->get_stock_out()->result();
         $this->template->load('template', 'stock_out/stock_out_data', $data);
     }

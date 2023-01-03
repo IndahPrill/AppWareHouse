@@ -12,6 +12,7 @@ class Supplier extends CI_Controller {
 
 	public function index()
 	{
+		$data['title'] = "Supplier";
 		$data['row']=$this->supplier_m->get();
 		$this->template->load('template', 'supplier/supplier_data', $data);
 	}
