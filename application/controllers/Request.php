@@ -12,6 +12,7 @@ class Request extends CI_Controller {
 
 	public function index()
 	{
+		$data['title'] = "Permintaan Barang";
 		$data['row']=$this->request_m->get();
 		$this->template->load('template', 'request/request_data', $data);
 	}

@@ -12,6 +12,7 @@ class Item extends CI_Controller {
 
 	public function index()
 	{
+		$data['title'] = "Stock Gudang";
 		$data['row']=$this->item_m->get();
 		$this->template->load('template', 'item/item_data', $data);
 	}
