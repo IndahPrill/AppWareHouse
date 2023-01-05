@@ -28,7 +28,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <header class="main-header">
-      <a href="<?= base_url('dashboard') ?>assets/index2.html" class="logo">
+      <a href="<?= site_url('Dashboard/das') ?>" class="logo">
         <span class="logo-mini"><b>WH</b></span>
         <span class="logo-lg"><b>Warehouse</b></span>
       </a>
@@ -84,35 +84,50 @@
       </div> -->
 
         <ul class="sidebar-menu" data-widget="tree">
-          <li class="header">MAIN NAVIGATION</li>
-          <li><a href="<?= site_url('dashboard') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+          <li class="header">MENU NAVIGATION</li>
+          <li <?= $this->uri->segment(2) == "das" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('Dashboard/das') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+          </li>
 
-          <?php if ($this->session->userdata('level') == 2) { ?>
-            <li><a href="<?= site_url('supplier') ?>"><i class="fa fa-ship"></i> <span>Supplier</span></a></li><?php } else if ($this->session->userdata('level') == 1) { ?>
-            <li><a href="<?= site_url('supplier') ?>"><i class="fa fa-ship"></i> <span>Supplier</span></a></li><?php } ?>
+          <?php if ($this->session->userdata('level') <= 2) { ?>
+          <li <?= $this->uri->segment(2) == "sup" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('Supplier/sup') ?>"><i class="fa fa-ship"></i> <span>Supplier</span></a>
+          </li>
+          <?php } ?>
 
-          <?php if ($this->session->userdata('level') == 2) { ?>
-            <li><a href="<?= site_url('item') ?>"><i class="fa fa-archive"></i> <span>Stock Gudang</span></a></li><?php } else if ($this->session->userdata('level') == 3) { ?>
-            <li><a href="<?= site_url('item') ?>"><i class="fa fa-archive"></i> <span>Stock Gudang</span></a></li><?php } ?>
+          <?php if ($this->session->userdata('level') >= 2) { ?>
+          <li <?= $this->uri->segment(2) == "itm" ? 'class="active"' : ''; ?>>
+            <a href="<?= site_url('Item/itm') ?>"><i class="fa fa-archive"></i> <span>Stock Barang</span></a>
+          </li>
+          <?php } ?>
 
-          <?php if ($this->session->userdata('level') == 2) { ?>
-            <li><a href="<?= site_url('stock/in') ?>"><i class="fa fa-truck"></i> <span>Stock In</span></a></li><?php } else if ($this->session->userdata('level') == 1) { ?>
-            <li><a href="<?= site_url('stock/in') ?>"><i class="fa fa-truck"></i> <span>Stock In</span></a></li><?php } ?>
+          <?php if ($this->session->userdata('level') <= 2) { ?>
+          <li <?= $this->uri->segment(2) == "in" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('Stock/in') ?>"><i class="fa fa-truck"></i> <span>Stock In</span></a>
+          </li>
+          <?php } ?>
 
-          <?php if ($this->session->userdata('level') == 2) { ?>
-            <li><a href="<?= site_url('stock/out') ?>"><i class="fa fa-shopping-cart"></i> <span>Stock out</span></a></li><?php } else if ($this->session->userdata('level') == 1) { ?>
-            <li><a href="<?= site_url('stock/out') ?>"><i class="fa fa-shopping-cart"></i> <span>Stock out</span></a></li><?php } ?>
+          <?php if ($this->session->userdata('level') <= 2) { ?>
+          <li <?= $this->uri->segment(2) == "out" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('Stock/out') ?>"><i class="fa fa-shopping-cart"></i> <span>Stock out</span></a>
+          </li>
+          <?php } ?>
 
-          <?php if ($this->session->userdata('level') == 3) { ?>
-            <li><a href="<?= site_url('request') ?>"><i class="fa fa-file-text"></i> <span>Permintaan Barang</span></a></li><?php } else if ($this->session->userdata('level') == 2) { ?>
-            <li><a href="<?= site_url('request') ?>"><i class="fa fa-file-text"></i> <span>Permintaan Barang</span></a></li><?php } ?>?>
+          <?php if ($this->session->userdata('level') >= 2) { ?>
+          <li <?= $this->uri->segment(2) == "req" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('Request/req') ?>"><i class="fa fa-file-text"></i> <span>Permintaan Barang</span></a>
+          </li>
+          <?php } ?>?>
 
 
-            <?php if ($this->fungsi->user_login()->level == 1) { ?>
-              <li class="header">SETTINGS</li>
-              <li><a href="<?= site_url('user') ?>"><i class="fa fa-user"></i> <span>Daftar User</span></a></li><?php } ?>
+          <?php if ($this->fungsi->user_login()->level == 1) { ?>
+          <li class="header">SETTINGS</li>
+          <li <?= $this->uri->segment(2) == "usr" ? 'class="active"' : ''; ?> >
+            <a href="<?= site_url('User/usr') ?>"><i class="fa fa-user"></i> <span>List User</span></a>
+          </li>
+          <?php } ?>
 
-            <li class="treeview"></li>
+          <li class="treeview"></li>
         </ul>
       </section>
     </aside>
