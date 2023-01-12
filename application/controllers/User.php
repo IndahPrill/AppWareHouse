@@ -14,9 +14,9 @@ class User extends CI_Controller {
 
 	public function index()
 	{
-		$data['title'] = "Daftar User";
+		$data['title'] = "List User";
         $data['row'] = $this->user_m->get();
-		$this->template->load('template', 'user/user_data', $data);
+		$this->template->load('Template/HomePage', 'user/user_data', $data);
 	}
 
 	public function add()
@@ -39,7 +39,7 @@ class User extends CI_Controller {
 
 		if ($this->form_validation->run() == FALSE)
 				{
-					$this->template->load('template', 'user/user_form_add');
+					$this->template->load('Template/HomePage', 'user/user_form_add');
 				}
 				else
 				{
@@ -83,7 +83,7 @@ class User extends CI_Controller {
 					$query = $this->user_m->get($id);
 					if($query->num_rows()>0){
 						$data['row'] = $query->row();
-						$this->template->load('template', 'user/user_form_edit', $data);
+						$this->template->load('Template/HomePage', 'user/user_form_edit', $data);
 					} else{
 						echo "<script>alert('Data Tidak Ditemukan');";
 						echo "<script>window.location='".site_url('user')."';</script>";

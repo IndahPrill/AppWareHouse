@@ -24,7 +24,7 @@ class Auth extends CI_Controller {
 			if ($query) {
 				$this->session->set_flashdata('success', 'Login Berhasil');
 				$data['title'] = "Dashboard";
-				$this->template->load('template', 'dashboard', $data);
+				$this->template->load('Template/HomePage', 'dashboard', $data);
 				// echo "<script>
 				// alert('Login berhasil'); window.location ='".site_url('dashboard')."';
 				// </script>";

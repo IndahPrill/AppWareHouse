@@ -1,6 +1,6 @@
 <?php
 
-Class Fungsi{
+Class Fungsi {
 
     protected $ci;
 

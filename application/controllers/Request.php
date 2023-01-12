@@ -14,7 +14,7 @@ class Request extends CI_Controller {
 	{
 		$data['title'] = "Permintaan Barang";
 		$data['row']=$this->request_m->get();
-		$this->template->load('template', 'request/request_data', $data);
+		$this->template->load('Template/HomePage', 'request/request_data', $data);
 	}
 
 	public function add()
@@ -31,7 +31,7 @@ class Request extends CI_Controller {
 			'page' => 'add',
 			'row' => $item
 		);
-		$this->template->load('template', 'request/request_form', $data);
+		$this->template->load('Template/HomePage', 'request/request_form', $data);
 	}
 
 
