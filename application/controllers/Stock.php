@@ -15,14 +15,14 @@ class Stock extends CI_Controller {
     {
         $data['title'] = "Stock In";
         $data['row'] = $this->stock_m->get_stock_in()->result();
-        $this->template->load('template', 'stock_in/stock_in_data', $data);
+        $this->template->load('Template/HomePage', 'stock_in/stock_in_data', $data);
     }
 
     public function stock_out_data()
     {
         $data['title'] = "Stock Out";
         $data['row'] = $this->stock_m->get_stock_out()->result();
-        $this->template->load('template', 'stock_out/stock_out_data', $data);
+        $this->template->load('Template/HomePage', 'stock_out/stock_out_data', $data);
     }
 
     public function stock_out_add()
@@ -30,7 +30,7 @@ class Stock extends CI_Controller {
         $item = $this->item_m->get()->result();
         $supplier = $this->supplier_m->get()->result();
         $data = ['item' => $item, 'supplier' => $supplier];
-        $this->template->load('template', 'stock_out/stock_out_form', $data);
+        $this->template->load('Template/HomePage', 'stock_out/stock_out_form', $data);
     }
 
     public function stock_in_add()
@@ -38,7 +38,7 @@ class Stock extends CI_Controller {
         $item = $this->item_m->get()->result();
         $supplier = $this->supplier_m->get()->result();
         $data = ['item' => $item, 'supplier' => $supplier];
-        $this->template->load('template', 'stock_in/stock_in_form', $data);
+        $this->template->load('Template/HomePage', 'stock_in/stock_in_form', $data);
     }
 
 

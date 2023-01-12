@@ -49,18 +49,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Dashboard/index';
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['default_controller']        = 'Dashboard/index';
+$route['404_override']              = 'Dashboard/error404';
+$route['translate_uri_dashes']      = FALSE;
 
-$route['Dashboard/das'] = 'Dashboard/index';
-$route['Supplier/sup']  = 'Supplier/index';
-$route['Item/itm']      = 'Item/index';
-$route['Request/req']   = 'Request/index';
-$route['User/usr']      = 'User/index';
+$route['Dashboard/das']             = 'Dashboard/index';
+$route['Supplier/sup']              = 'Supplier/index';
+$route['Item/itm/getListItm']       = 'Item/index';
+$route['Item/itm/createItm']        = 'Item/add';
+$route['Request/req/getListReq']    = 'Request/index';
+$route['Request/req/createReq']     = 'Request/add';
+$route['User/usr']                  = 'User/index';
 
-$route['Stock/in']      = 'stock/stock_in_data';
-$route['Stock/in/add']  = 'stock/stock_in_add'; 
+$route['Stock/in']          = 'stock/stock_in_data';
+$route['Stock/in/add']      = 'stock/stock_in_add'; 
 
-$route['Stock/out']     = 'stock/stock_out_data';
-$route['Stock/out/add'] = 'stock/stock_out_add'; 
+$route['Stock/out']         = 'stock/stock_out_data';
+$route['Stock/out/add']     = 'stock/stock_out_add'; 

@@ -7,6 +7,13 @@ class Dashboard extends CI_Controller {
 	{
 		check_not_login();
 		$data['title'] = "Dashboard";
-		$this->template->load('template', 'dashboard', $data);
+		$this->template->load('Template/HomePage', 'dashboard', $data);
+	}
+	
+	public function error404()
+	{
+		check_not_login();
+		$data['title'] = "Dashboard";
+		$this->template->load('Template/HomePage', '404', $data);
 	}
 }

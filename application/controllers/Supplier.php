@@ -14,7 +14,7 @@ class Supplier extends CI_Controller {
 	{
 		$data['title'] = "Supplier";
 		$data['row']=$this->supplier_m->get();
-		$this->template->load('template', 'supplier/supplier_data', $data);
+		$this->template->load('Template/HomePage', 'supplier/supplier_data', $data);
 	}
 
 
@@ -30,7 +30,7 @@ class Supplier extends CI_Controller {
 			'page' => 'add',
 			'row' => $supplier
 		);
-		$this->template->load('template', 'supplier/supplier_form', $data);
+		$this->template->load('Template/HomePage', 'supplier/supplier_form', $data);
 	}
 
 	public function process()
@@ -63,7 +63,7 @@ class Supplier extends CI_Controller {
 				'page' => 'edit', 
 				'row' => $supplier
 			); 
-			$this->template->load('template', 'supplier/supplier_form', $data);
+			$this->template->load('Template/HomePage', 'supplier/supplier_form', $data);
 		} else{
 			echo "<script>alert('Data Tidak Ditemukan');";
 			//echo "<script>window.location='".site_url('user')."';</script>";

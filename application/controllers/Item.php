@@ -12,9 +12,9 @@ class Item extends CI_Controller {
 
 	public function index()
 	{
-		$data['title'] = "Stock Gudang";
-		$data['row'] = $this->item_m->get();
-		$this->template->load('template', 'item/item_data', $data);
+		$data['title'] = "Daftar Stock";
+		// $data['row'] = $this->item_m->get();
+		$this->template->load('Template/HomePage', 'item/item_data', $data);
 	}
 
 	public function add()
@@ -26,30 +26,30 @@ class Item extends CI_Controller {
 		$item->nama = null;
         $item->ukuran = null;
 		$data = array(
-			'page' => 'add',
-			'row' => $item
+			"title" => 'Tambah Stock',
+			"page" 	=> 'add',
+			"row" 	=> $item
 		);
-		$this->template->load('template', 'item/item_form', $data);
+		$this->template->load('Template/HomePage', 'item/item_form', $data);
 	}
 
 	public function process()
 	{
-		$post= $this->input->post(null, TRUE);
+		$post = $this->input->post(null, TRUE);
 		if(isset($_POST['add'])) {
-            if ($this->item_m->check_kode($post['kode'])->num_rows() > 0){
+            if ($this->item_m->check_kode($post['kode'])->num_rows() > 0) {
                 $this->session->set_flashdata('error', "kode $post[kode] sudah dipakai");
                 redirect('item/add');
             }
 			$this->item_m->add($post);
-		} else if(isset($_POST['edit'])){
+		} else if(isset($_POST['edit'])) {
 			$this->item_m->edit($post);
 		}
-		{
-			if($this->db->affected_rows() >0){
-				$this->session->set_flashdata('success', "Data berhasil disimpan");
-			}
-			redirect('item');	
+		
+		if($this->db->affected_rows() >0) {
+			$this->session->set_flashdata('success', "Data berhasil disimpan");
 		}
+		redirect('item');	
 	}
 
 	public function edit($id)
@@ -63,8 +63,8 @@ class Item extends CI_Controller {
 				'page' => 'edit', 
 				'row' => $item
 			); 
-			$this->template->load('template', 'item/item_form', $data);
-		} else{
+			$this->template->load('Template/HomePage', 'item/item_form', $data);
+		} else {
 			echo "<script>alert('Data Tidak Ditemukan');";
 			echo "<script>window.location='".site_url('user')."';</script>";
 		}
