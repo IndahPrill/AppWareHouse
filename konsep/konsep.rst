@@ -27,12 +27,9 @@ Barang jadi   -> sofa -> meja
 
 ### Penambahan konsep form input permintaan (Request)
 
-`produksi`
-
-``` 
-jml permintaan (qty_req) adalah jumlah barang yang sesuai dengan jumlah stok barang yang tersedia (qty) jika permintaan lebih stok (qty) maka sisanya dimasukkan ke jml konfirmasi (qty_confir).
+produksi
+: jml permintaan (qty_req) adalah jumlah barang yang sesuai dengan jumlah stok barang yang tersedia (qty) jika permintaan lebih stok (qty) maka sisanya dimasukkan ke jml konfirmasi (qty_confir).
 form input permintaan otomatis melakukan pemisahan antara permintaan dan konfirmasi jika barang lebih dari stok.
-```
 
 ### Contoh Timline Barang
 

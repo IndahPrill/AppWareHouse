@@ -121,10 +121,10 @@ CREATE TABLE `d_request` (
   `lumber_type` varchar(255) NOT NULL COMMENT 'tipe kayu',
   `species_type` varchar(255) NOT NULL COMMENT 'jenis kayu',
   `qty_tot` int(11) NOT NULL,
-  `qty_remainder` int(11) DEFAULT NULL,
-  `qty_in` int(11) DEFAULT NULL,
+  `qty_confir` int(11) DEFAULT NULL,
+  `qty_req` int(11) DEFAULT NULL,
   `qty_cancel` int(11) DEFAULT NULL,
-  `status_req` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0' COMMENT '5=cencel dan gudang;4=cencel;3=cencel sebagian;2=gudang;1=gudang sebagaian;0=pengiriman',
+  `status_req` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0' COMMENT '5=cencel dan terkirim;4=cencel;3=cencel sebagian;2=terkirim;1=terkirim sebagaian;0=permintaan',
   `is_active` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1=tidak aktif;0=aktif',
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_dtl_req`)
@@ -161,13 +161,13 @@ CREATE TABLE `activity_log_req` (
   `lumber_type` varchar(255) NOT NULL COMMENT 'tipe kayu',
   `species_type` varchar(255) NOT NULL COMMENT 'jenis kayu',
   `qty_tot` int(11) NOT NULL,
-  `qty_remainder` int(11) DEFAULT NULL,
-  `qty_in` int(11) DEFAULT NULL,
+  `qty_confir` int(11) DEFAULT NULL,
+  `qty_req` int(11) DEFAULT NULL,
   `qty_cancel` int(11) DEFAULT NULL,
+  `status_log_req` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0' COMMENT '5=cencel dan terkirim;4=cencel;3=cencel sebagian;2=terkirim;1=terkirim sebagaian;0=permintaan',
   `remark` varchar(255) DEFAULT NULL,
-  `status_req` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0' COMMENT '5=cencel dan gudang;4=cencel;3=cencel sebagian;2=gudang;1=gudang sebagaian;0=pengiriman',
   PRIMARY KEY (`id_log_req`)
-) ENGINE=InnoDB AUTO_INCREMENT=295 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Table structure for table `m_stock`
