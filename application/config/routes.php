@@ -55,10 +55,16 @@ $route['translate_uri_dashes']      = FALSE;
 
 $route['Dashboard/das']             = 'Dashboard/index';
 $route['Supplier/sup']              = 'Supplier/index';
+
+// Item
 $route['Item/itm/getListItm']       = 'Item/index';
 $route['Item/itm/createItm']        = 'Item/add';
+
+// Request
 $route['Request/req/getListReq']    = 'Request/index';
 $route['Request/req/createReq']     = 'Request/add';
+$route['Request/req/getSupplier']	= 'Request/getSupplier';
+
 $route['User/usr']                  = 'User/index';
 
 $route['Stock/in']          = 'stock/stock_in_data';

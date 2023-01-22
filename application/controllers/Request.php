@@ -21,6 +21,7 @@ class Request extends CI_Controller {
 	{
 		$item = new stdClass();
 		$item->request_id = null;
+		$item->getKdReq = null;
 		$item->jenis = null;
 		$item->jumlah = null;
 		$item->keterangan = null;
@@ -28,14 +29,14 @@ class Request extends CI_Controller {
         $item->date = null;
         $item->status = null;
 		$data = array(
+			'title' => 'Tambah Permintaan Barang',
 			'page' => 'add',
 			'row' => $item
 		);
 		$this->template->load('Template/HomePage', 'request/request_form', $data);
 	}
 
-
-public function process()
+	public function process()
 	{
 		$post= $this->input->post(null, TRUE);
 		
@@ -47,6 +48,7 @@ public function process()
         }
         redirect('request');	
     }
+
     public function confirm($id)
 	{
 		$this->request_m->confirm($id);
@@ -54,5 +56,11 @@ public function process()
 			echo "<script>alert('Data Berhasil Diubah');</script>";
 		}
 		echo "<script>window.location='".site_url('request')."';</script>";	
+	}
+
+	public function getSupplier()
+	{
+		$data = $this->request_m->getSupplier();
+        echo json_encode($data);
 	}
 }

@@ -13,7 +13,6 @@ class Request_m extends CI_Model
         return $query;
     }
 
-
     public function add($post)
     {
         $params = 
@@ -28,8 +27,7 @@ class Request_m extends CI_Model
         $this->db->insert('request', $params);
     }
 
-
-public function confirm($id)
+	public function confirm($id)
 	{
         $params = 
         [
@@ -37,5 +35,15 @@ public function confirm($id)
         ];
         $this->db->where('request_id', $id);
 		$this->db->update('request', $params);
+	}
+
+	public function getSupplier()
+	{
+		$qry = $this->db->query("SELECT supplier_id,`name` FROM supplier WHERE is_active = '0'")->result_array();
+        if ($qry) {
+            return $qry;
+        } else {
+            return false;
+        }
 	}
 }
