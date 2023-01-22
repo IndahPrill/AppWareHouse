@@ -170,7 +170,7 @@
       }
     })
 
-    let statusSuccess = "<?= $this->session->flashdata('success'); ?>";
+    let statusSuccess = "<?= $this->session->flashdata('successLogin'); ?>";
     if (statusSuccess) {
       Toast.fire({
         icon: 'success',

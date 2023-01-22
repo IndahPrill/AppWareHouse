@@ -9,68 +9,47 @@
 
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Request <small>Permintaan Barang</small></h1>
+            <h1>Daftar <small>Permintaan Barang</small></h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
-                <li class="active">Request</li>
+                <li><a href="<?= site_url('Dashboard/das') ?>"><i class="fa fa-dashboard"></i></a></li>
+                <li>Permintaan Barang</li>
+                <li class="active">Daftar</li>
             </ol>
         </section>
 
         <section class="content">
             <?php $this->view('messages')?>
-            <div class="box">
+            <div class="box box-primary">
 
                 <div class="box-header">
-                    <h3 class="box-title">Daftar Request</h3>
+                    <!-- <h3 class="box-title">Daftar Permintaan</h3> -->
+					<!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-cancel">Launch Default Modal</button> -->
                     <div class="pull-right">
                         <?php if($this->session->userdata('level') == 3){?>
-                        <a href="<?=site_url('request/add')?>" class="btn btn-primary btn-flat">
-                            <i class="fa fa-plus"></i> Add Request
+                        <a href="<?=site_url('Request/req/createReq')?>" class="btn btn-primary btn-flat">
+                            <i class="fa fa-plus"></i> Tambah
                         </a><?php }?>
                     </div>
                 </div>
 
-                <div class="box-body table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tanggal</th>
-                                <th>Alasan</th>
-                                <th>Jenis Kayu</th>
-                                <th>Ukuran (satuan meter)</th>
-                                <th>Jumlah</th>
-                                <th>Status</th>
-                                <?php if($this->session->userdata('level') == 2){?><th>Action</th><?php }?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                $no = 1;
-                                foreach($row->result() as $key => $data) {?>
-                            <tr>
-                                <td><?=$no++?></td>
-                                <td><?=$data->date?></td>
-                                <td><?=$data->keterangan?></td>
-                                <td><?=$data->jenis_kayu?></td>
-                                <td><?=$data->ukuran?></td>
-                                <td><?=$data->jumlah?></td>
-                                <td><?=$data->status?></td>
-                                <?php if($this->session->userdata('level') == 2){?>
-                                <td class="text-center" width="160px">
-                                    <a href="<?=site_url('request/confirm/'.$data->request_id)?>"
-                                        class="btn btn-primary btn-xs">
-                                        <i class="fa fa-pencil"></i> Konfirmasi Permintaan
-                                    </a>
-                                    <?php }?>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php 
-                                } ?>
-                        </tbody>
-
-                    </table>
+                <div class="box-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped" id="tblListReq">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Kode</th>
+									<th>Tanggal</th>
+									<th>Nama</th>
+									<th>Jumlah</th>
+									<th>Status</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody id="dataListReq">
+							</tbody>
+						</table>
+					</div>
                 </div>
             </div>
         </section>
@@ -80,8 +59,61 @@
     <?php $this->load->view('Template/Footer') ?>
     <!-- Footer -->
 
+    <div class="modal fade" id="modal-cancel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+			<div class="overlay-wrapper">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Konfirmasi Pembatalan</h4>
+					</div>
+					<form method="post" id="formCencel">
+						<div class="modal-body">
+							<div class="form-group">
+                                <label for="tglcencel">Tanggal</label>
+                                <input type="text" class="form-control datetimepicker-input" name="tglcencel" id="tglcencel" data-toggle="datetimepicker" data-target="#datetimepicker5" placeholder="dd-mm-yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="remarkCencel">Deskripsi <span style="font-size: 11px;">(Opsional)</span></label>
+                                <textarea class="form-control" name="remarkCencel" id="remarkCencel" placeholder="Masukkan Deskripsi"></textarea>
+                            </div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+							<button type="button" class="btn btn-primary" id="btnSend">Simpan</button>
+						</div>
+					</from>
+				</div>
+			</div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Footer -->
 <?php $this->load->view('Template/Script') ?>
 <!-- Footer -->
+
+<script type="text/javascript">
+	$(function() {
+		displayData()
+
+		let dateStart = moment();
+
+		$("#tblListReq").DataTable({
+			"responsive": true,
+			"autoWidth": false,
+			"pageLength": 10,
+			"lengthMenu": [5, 10, 20, 50],
+		})
+		
+		$('#tglcencel').datepicker({
+			autoclose: true
+		})
+	})
+
+	function displayData() {
+		
+	}
+</script>

@@ -13,22 +13,6 @@
             <?php } ?>
 
             <?php if ($this->session->userdata('level') >= 2) { ?>
-            <!-- <li class="<?= $this->uri->segment(2) == "itm" ? 'active' : ''; ?> treeview">
-                <a href="#">
-                    <i class="fa fa-cube"></i> <span>Stock Barang</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li <?= $this->uri->segment(3) == "getList" ? 'class="active"' : ''; ?>>
-                        <a href="<?= site_url('Item/itm/getList') ?>"><i class="fa fa-circle-o"></i> Daftar Stock</a>
-                    </li>
-                    <li <?= $this->uri->segment(3) == "create" ? 'class="active"' : ''; ?>>
-                        <a href="<?= site_url('Item/itm/create') ?>"><i class="fa fa-circle-o"></i> Tambah Stock</a>
-                    </li>
-                </ul>
-            </li> -->
             <li <?= $this->uri->segment(2) == "itm" ? 'class="active"' : ''; ?> >
                 <a href="<?= site_url('Item/itm/getListItm') ?>"><i class="fa fa-cube"></i> <span>Stock Barang</span></a>
             </li>
@@ -49,7 +33,7 @@
             <?php if ($this->session->userdata('level') >= 2) { ?>
             <li class="<?= $this->uri->segment(2) == "req" ? 'active' : ''; ?> treeview">
                 <a href="#">
-                    <i class="fa fa-list-ul"></i> <span>Request Barang</span>
+                    <i class="fa fa-list-ul"></i> <span>Permintaan Barang</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>

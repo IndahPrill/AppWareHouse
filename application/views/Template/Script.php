@@ -1,3 +1,4 @@
+<!-- jQuery 3 -->
 <script src="<?= base_url() ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="<?= base_url() ?>assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
@@ -13,8 +14,8 @@
 <!-- FastClick -->
 <script src="<?= base_url() ?>assets/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- DataTables -->
-<script src="<?= base_url() ?>assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="<?= base_url() ?>assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="<?= base_url() ?>assets/bower_components/DataTables/DataTables-1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="<?= base_url() ?>assets/bower_components/DataTables/DataTables-1.13.1/js/dataTables.bootstrap.min.js"></script>
 <!-- Sweetalert2 -->
 <script src="<?= base_url() ?>assets/plugins/sweetalert2/dist/sweetalert2.all.min.js"></script>
 <!-- AdminLTE App -->
