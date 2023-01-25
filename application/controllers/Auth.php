@@ -22,7 +22,7 @@ class Auth extends CI_Controller {
 			$query = $this->user_m->login($post);
 			// print_r($query); die();
 			if ($query) {
-				$this->session->set_flashdata('success', 'Login Berhasil');
+				$this->session->set_flashdata('successLogin', 'Login Berhasil');
 				$data['title'] = "Dashboard";
 				$this->template->load('Template/HomePage', 'dashboard', $data);
 				// echo "<script>

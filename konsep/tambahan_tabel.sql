@@ -126,7 +126,6 @@ CREATE TABLE `d_request` (
   `qty_cancel` int(11) DEFAULT NULL,
   `status_req` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0' COMMENT '5=cencel dan terkirim;4=cencel;3=cencel sebagian;2=terkirim;1=terkirim sebagaian;0=permintaan',
   `is_active` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1=tidak aktif;0=aktif',
-  `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_dtl_req`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -181,11 +180,15 @@ CREATE TABLE `m_stock` (
   `kd_gudang` varchar(25) NOT NULL,
   `kd_barang` varchar(25) NOT NULL,
   `nama_brg` varchar(255) NOT NULL,
-  `tipe_kayu` varchar(25) NOT NULL,
-  `jenis_kayu` varchar(25) NOT NULL,
+	`length_size` varchar(255) NOT NULL,
+  `width_size` varchar(255) NOT NULL,
+  `lumber_type` varchar(255) NOT NULL COMMENT 'tipe kayu',
+  `species_type` varchar(255) NOT NULL COMMENT 'jenis kayu',
   `qty` int(11) NOT NULL,
   `is_active` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1=tidak aktif;0=aktif',
-  `created_at` datetime DEFAULT current_timestamp(),
+  `created_at` datetime DEFAULT NULL,
   `created_by` varchar(50) DEFAULT NULL,
+	`update_at` datetime DEFAULT NULL,
+	`update_by` varchar(50) DEFAULT NULL
   PRIMARY KEY (`id_stock`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
