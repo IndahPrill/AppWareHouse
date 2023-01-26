@@ -4,42 +4,38 @@ class item_m extends CI_Model
 {
     public function get($id = null)
     {
-        $this->db->from('item');
-        if($id != null)
-            {
-                $this->db->where('item_id', $id);
-            }
+        $this->db->from('m_stock');
+        if($id != null) {
+            $this->db->where('kd_req', $id);
+        }
         $query = $this->db->get();
         return $query;
     }
 
-
     public function add($post)
     {
-        $params = 
-        [
-            'kode' => $post['kode'],
-            'kategori' => $post['category'],
-            'nama' => $post['nama'],
-            'ukuran' => $post['ukuran'],
-        ];
+        $params = array(
+                    'kode'      => $post['kode'],
+                    'kategori'  => $post['category'],
+                    'nama'      => $post['nama'],
+                    'ukuran'    => $post['ukuran'],
+                );
         $this->db->insert('item', $params);
     }
 
     public function edit($post)
     {
-        $params = 
-        [
-            'kode' => $post['kode'],
-            'kategori' => $post['category'],
-            'nama' => $post['nama'],
-            'ukuran' => $post['ukuran'],
-        ];
+        $params = array(
+                    'kode'      => $post['kode'],
+                    'kategori'  => $post['category'],
+                    'nama'      => $post['nama'],
+                    'ukuran'    => $post['ukuran'],
+                );
         $this->db->where('item_id', $post['id']);
         $this->db->update('item', $params);
     }
- 
-    function check_kode($code, $id = null){
+
+    public function check_kode($code, $id = null) {
         $this->db->from('item');
         $this->db->where('kode', $code);
         if($id != null){

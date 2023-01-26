@@ -3307,11 +3307,15 @@ table.text-center th {
 .register-page {
   height: auto;
   background: #d2d6de;
+  background-image: url('../img/Menu.png');
+  background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
 }
 .login-box,
 .register-box {
   width: 360px;
-  margin: 7% auto;
+  margin: 13% auto;
 }
 @media (max-width: 768px) {
   .login-box,
