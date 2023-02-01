@@ -192,3 +192,17 @@ CREATE TABLE `m_stock` (
 	`update_by` varchar(50) DEFAULT NULL
   PRIMARY KEY (`id_stock`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+ALTER TABLE `task`.`m_request` 
+DROP COLUMN `nama_brg`;
+
+ALTER TABLE `task`.`m_request` 
+ADD COLUMN `supplier_id` int(11) NOT NULL AFTER `date_req`;
+
+ALTER TABLE `task`.`d_request` 
+DROP COLUMN `supplier_id`;
+
+ALTER TABLE `task`.`activity_log_req` 
+ADD COLUMN `length_size` varchar(255) NOT NULL AFTER `kd_barang`,
+ADD COLUMN `width_size` varchar(255) NOT NULL AFTER `length_size`;

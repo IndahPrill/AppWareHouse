@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Jakarta');
 
-function activity_log_log($date_log, $kd_req, $kd_supplier, $kd_barang, $length_size, $width_size, $lumber_type, $species_type, $qty_tot, $qty_confir, $qty_req, $remark, $status_log)
+function activity_log_req($date_log, $kd_req, $kd_supplier, $kd_barang, $length_size, $width_size, $lumber_type, $species_type, $qty_tot, $qty_confir, $qty_req, $qty_cancel, $remark, $status_req)
 {
     $CI = &get_instance();
     if ($date_log == "") {
@@ -10,7 +10,7 @@ function activity_log_log($date_log, $kd_req, $kd_supplier, $kd_barang, $length_
 
     $param = array(
         'date_log'      => $date_log,
-        'user_id'		=> (int) $CI->session->userdata('user_id'),
+        'user_id'		=> (int) $CI->session->userdata('name'),
         'kd_req'		=> $kd_req,
         'kd_supplier'   => $kd_supplier,
         'kd_barang'     => $kd_barang,
