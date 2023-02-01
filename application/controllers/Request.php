@@ -12,8 +12,9 @@ class Request extends CI_Controller {
 
 	public function index()
 	{
-		$data['title'] = "Permintaan Barang";
-		$data['row']=$this->request_m->get();
+		$data['title'] 		= "Permintaan Barang";
+		$data['row']		= $this->request_m->get();
+
 		$this->template->load('Template/HomePage', 'request/request_data', $data);
 	}
 
@@ -28,10 +29,13 @@ class Request extends CI_Controller {
         $item->ukuran = null;
         $item->date = null;
         $item->status = null;
+		
+		$getKdReq = $this->request_m->getKdReq();
 		$data = array(
-			'title' => 'Tambah Permintaan Barang',
-			'page' => 'add',
-			'row' => $item
+			'title' 	=> 'Tambah Permintaan Barang',
+			'page' 		=> 'add',
+			'row' 		=> $item,
+			'getKdReq' 	=> $getKdReq
 		);
 		$this->template->load('Template/HomePage', 'request/request_form', $data);
 	}
@@ -62,5 +66,64 @@ class Request extends CI_Controller {
 	{
 		$data = $this->request_m->getSupplier();
         echo json_encode($data);
+	}
+
+	public function getMstrBrg()
+	{
+		$data = $this->request_m->getMstrBrg();
+		echo json_encode($data);
+	}
+
+	public function postTmpReq()
+	{
+		$kodeReq		= $this->input->post('kodeReq');
+        $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
+        $lengthSize		= $this->input->post('lengthSize');
+        $widthSize		= $this->input->post('widthSize');
+        $lumberType		= $this->input->post('lumberType');
+        $speciesType	= $this->input->post('speciesType');
+        $qtyReq			= $this->input->post('qtyReq');
+
+        $data = array(
+            'kd_req'		=> $kodeReq,
+            'kd_barang'     => $kodeBrg,
+            'name'          => $nmBarang,
+            'length_size'	=> $lengthSize,
+            'width_size'	=> $widthSize,
+            'lumber_type'	=> $lumberType,
+            'species_type'	=> $speciesType,
+            'qty'			=> $qtyReq,
+        );
+
+        $response = $this->request_m->postData('tem_req', $data);
+
+        echo json_encode($response);
+	}
+
+	public function GetDtlBarang()
+	{
+		$kodeReq = $this->input->post('kodeReq');
+		$data = $this->request_m->GetDtlBarang($kodeReq);
+        echo json_encode($data);
+	}
+
+	public function delTmpReq()
+	{
+		$idTemReq = $this->input->post('idTemReq');
+		$data = $this->request_m->delTmpReq('tem_req',$idTemReq);
+        echo json_encode($data);
+	}
+
+	public function postReq()
+	{
+		$kodeReq	= $this->input->post('kdReq');
+		$tglReqBrg	= $this->input->post('tglReqBrg');
+		$kdSup		= $this->input->post('kdSup');
+		$remark		= $this->input->post('remark');
+		$totalQty	= $this->input->post('totalQty');
+
+		$response = $this->request_m->postReq($kodeBrg, $tglReqBrg, $kdSup, $remark, $totalQty);
+		echo json_encode($response);
 	}
 }
