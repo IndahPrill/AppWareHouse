@@ -123,7 +123,20 @@ class Request extends CI_Controller {
 		$remark		= $this->input->post('remark');
 		$totalQty	= $this->input->post('totalQty');
 
-		$response = $this->request_m->postReq($kodeBrg, $tglReqBrg, $kdSup, $remark, $totalQty);
+		$action = $this->request_m->postReq($kodeReq, $tglReqBrg, $kdSup, $remark, $totalQty);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success'
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail'
+			);
+		}
+
 		echo json_encode($response);
 	}
 }

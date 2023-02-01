@@ -167,4 +167,81 @@ class Request_m extends CI_Model
             return false;
         }
 	}
+
+	public function postReq($kodeReq, $tglReqBrg, $kdSup, $remark, $totalQty)
+	{
+		$getTemReq = $this->db->query(
+			"SELECT 
+				kd_req,
+				kd_barang,
+				`name`,
+				length_size,
+				width_size,
+				lumber_type,
+				species_type,
+				qty
+			FROM
+				tem_req
+			WHERE
+				kd_req = '$kodeReq'"
+		)->result_array();
+
+		$dateNow = date("Y-m-d H:i:s");
+
+        $tglReq = $tglReqBrg . " " . date("H:i:s");
+
+		$dataMaster = array(
+            'kd_req'		=> $kodeReq,
+            'date_req'		=> $tglReq,
+            'supplier_id'	=> $kdSup,
+            'total_req'		=> $totalQty,
+            'created_at'	=> $dateNow,
+			'created_by'	=> $this->session->userdata('name')
+        );
+
+		$datadetail = array();
+        for ($i = 0; $i < count($getTemReq); $i++) {
+            $detail = array(
+                'kd_req' 		=> $getTemReq[$i]['kd_req'],
+                'kd_barang'    	=> $getTemReq[$i]['kd_barang'],
+                'length_size'	=> $getTemReq[$i]['length_size'],
+                'width_size'   	=> $getTemReq[$i]['width_size'],
+                'lumber_type'	=> $getTemReq[$i]['lumber_type'],
+                'species_type'	=> $getTemReq[$i]['species_type'],
+                'qty_tot'		=> $getTemReq[$i]['qty']
+            );
+            array_push($datadetail, $detail);
+        }
+
+		$insMater  = $this->db->insert("m_request", $dataMaster); // insert ke tabel m_request
+        $insdetail = $this->db->insert_batch("d_request", $datadetail); // insert ke tabel d_request
+
+        if ($insMater && $insdetail) {
+            if ($this->db->affected_rows() > 0) {
+                for ($i = 0; $i < count($getTemReq); $i++) {
+					// Insert to log
+                    activity_log_req(
+						$tglReq
+						, $kodeReq
+						, $kdSup
+						, $getTemReq[$i]['kd_barang']
+						, $getTemReq[$i]['length_size']
+						, $getTemReq[$i]['width_size']
+						, $getTemReq[$i]['lumber_type']
+						, $getTemReq[$i]['species_type']
+						, $getTemReq[$i]['qty']
+						, '0'
+						, '0'
+						, '0'
+						, $remark
+						, '0');
+                }
+            }
+
+            $this->db->delete("tem_req", array('kd_req' => $kodeReq)); // hapus data di tabel sementara
+            return true;
+        } else {
+            return false;
+        }
+	}
 }

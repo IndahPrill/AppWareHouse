@@ -180,7 +180,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" class="form-control pull-right" id="tglReqBrg" name="tglReqBrg" required>
+								<input type="text" class="form-control pull-right" id="tglReqBrg" name="tglReqBrg" placeholder="yyyy-mm-dd" required autocomplete="off">
 							</div>
 						</div>
 						<div class="form-group">
@@ -188,10 +188,10 @@
 							<select class="form-control" id="kdSup" name="kdSup" required></select>
 						</div>
 						<div class="form-group">
-							<label for="remark">Komentar</label>
-							<textarea class="form-control" id="remark" name="remark" placeholder="Masukkan ..." rows="2" required></textarea>
+							<label for="remark">Komentar (Opsional)</label>
+							<textarea class="form-control" id="remark" name="remark" placeholder="Masukkan ..." rows="2"></textarea>
 						</div>
-						<input type="hidden" name="kdReq" value="<?= $row->getKdReq; ?>">
+						<input type="hidden" name="kdReq" value="<?= $getKdReq; ?>">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="closeSend"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Batal</button>
@@ -235,7 +235,8 @@
 		})
 
 		$('#tglReqBrg').datepicker({
-			autoclose: true
+			autoclose: true,
+			format: 'yyyy-dd-mm'
 		})
 
 		$("#formBarang").validate({
@@ -333,12 +334,12 @@
 			rules: {
 				tglReqBrg: "required",
 				kdSup: "required",
-				remark: "required",
+				// remark: "required",
 			},
 			messages: {
 				tglReqBrg: "Tanggal Tidak Boleh Kosong",
 				kdSup: "Supplier Tidak Boleh Kosong",
-				remark: "Remark Tidak Boleh Kosong",
+				// remark: "Remark Tidak Boleh Kosong",
 			},
 			errorElement: 'span',
 			errorPlacement: function(error, element) {
@@ -376,15 +377,25 @@
 						var loading = '<div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>';
 						$("#loadingSImpan").html(loading);
 					},
-					success: function(hasil) {
-						console.log(hasil);
-						Toast.fire({
-							icon: 'success',
-							title: 'Berhasil Simpan Pembelian Barang!'
-						});
-						setInterval(function() {
-							location.reload();
-						}, 3000);
+					success: function(res) {
+						// console.log(hasil);
+						if (res.status) {
+							Toast.fire({
+								icon: 'success',
+								title: 'Berhasil Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						} else {
+							Toast.fire({
+								icon: 'error',
+								title: 'Gagal Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						}
 					}
 				});
 			}
