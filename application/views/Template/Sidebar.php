@@ -52,7 +52,7 @@
             <?php } ?>
 			
 			<?php if ($this->session->userdata('level') <= 2) { ?>
-			<li class="<?= $this->uri->segment(2) == "sup==" ? 'active' : ''; ?> treeview">
+			<li class="<?= $this->uri->segment(2) == "sup" ? 'active' : ''; ?> treeview">
                 <a href="#">
                     <i class="fa fa-send"></i> <span>Supplier</span>
                     <span class="pull-right-container">
