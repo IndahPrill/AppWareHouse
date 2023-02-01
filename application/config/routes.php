@@ -54,7 +54,10 @@ $route['404_override']              = 'Dashboard/error404';
 $route['translate_uri_dashes']      = FALSE;
 
 $route['Dashboard/das']             = 'Dashboard/index';
+
 $route['Supplier/sup']              = 'Supplier/index';
+$route['Supplier/sup/getListSup']	= 'Supplier/getListSup';
+$route['Supplier/sup/createSup']	= 'Supplier/createSup';
 
 // Item
 $route['Item/itm/getListItm']       = 'Item/index';
@@ -64,11 +67,21 @@ $route['Item/itm/createItm']        = 'Item/add';
 $route['Request/req/getListReq']    = 'Request/index';
 $route['Request/req/createReq']     = 'Request/add';
 $route['Request/req/getSupplier']	= 'Request/getSupplier';
+$route['Request/req/getMstrBrg']	= 'Request/getMstrBrg';
+$route['Request/req/postTmpReq']	= 'Request/postTmpReq';
+$route['Request/req/GetDtlBarang']	= 'Request/GetDtlBarang';
+$route['Request/req/delTmpReq']		= 'Request/delTmpReq';
+$route['Request/req/postReq']		= 'Request/postReq';
+
+// Stock
+$route['Stock/sto/getListStock']	= 'Stock/getListStock';
+$route['Stock/sto/stockIn']			= 'Stock/stock_in_data';
+$route['Stock/sto/stockOut']		= 'Stock/stock_out_data';
 
 $route['User/usr']                  = 'User/index';
 
-$route['Stock/in']          = 'stock/stock_in_data';
-$route['Stock/in/add']      = 'stock/stock_in_add'; 
+$route['Stock/in']          		= 'stock/stock_in_data';
+$route['Stock/in/add']      		= 'stock/stock_in_add'; 
 
-$route['Stock/out']         = 'stock/stock_out_data';
-$route['Stock/out/add']     = 'stock/stock_out_add'; 
+$route['Stock/out']         		= 'stock/stock_out_data';
+$route['Stock/out/add']     		= 'stock/stock_out_add'; 
