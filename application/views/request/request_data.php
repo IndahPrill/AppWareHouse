@@ -40,13 +40,22 @@
 									<th>#</th>
 									<th>Kode</th>
 									<th>Tanggal</th>
-									<th>Nama</th>
 									<th>Jumlah</th>
 									<th>Status</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody id="dataListReq">
+								<tr>
+									<td>1</td>
+									<td>REQ001</td>
+									<td>2023-01=15 12:10:01</td>
+									<td>[20/0] <button type="button" class="btn btn-xs btn-default" data-toggle="popover" title="Rincian Jumlah" data-content="Total = 15 <br> Total Sisa = 0" data-trigger="focus" onclick=""><i class="fa fa-info-circle"></i></button></td>
+									<td><span class="badge badge-info">Pengiriman</span></td>
+									<td>
+										<a href="<?= site_url('Request/req/dtlReq')?>" class="btn btn-xs btn-primary"><i class="fa fa-folder"></i>&nbsp;&nbsp;Detail&nbsp;&nbsp;</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
