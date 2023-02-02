@@ -18,6 +18,13 @@ class Request extends CI_Controller {
 		$this->template->load('Template/HomePage', 'request/request_data', $data);
 	}
 
+	public function dtlReq()
+	{
+		$data['title'] 		= "Detail Permintaan Barang";
+
+		$this->template->load('Template/HomePage', 'request/request_detail', $data);
+	}
+
 	public function add()
 	{
 		$item = new stdClass();

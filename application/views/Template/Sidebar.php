@@ -38,7 +38,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-					<li <?= $this->uri->segment(3) == "getListReq" ? 'class="active"' : ''; ?> >
+					<li <?= in_array($this->uri->segment(3), array("getListReq", "dtlReq")) ? 'class="active"' : ''; ?> >
 						<a href="<?= site_url('Request/req/getListReq') ?>"><i class="fa fa-circle-o"></i> Daftar</a>
 					</li>
 					<?php if (in_array($this->session->userdata('level'), array(1,3))) { ?>
