@@ -78,7 +78,6 @@ class Request extends CI_Controller {
 	{
 		$kodeReq		= $this->input->post('kodeReq');
         $kodeBrg		= $this->input->post('kodeBrg');
-        $nmBarang		= $this->input->post('nmBarang');
         $lengthSize		= $this->input->post('lengthSize');
         $widthSize		= $this->input->post('widthSize');
         $lumberType		= $this->input->post('lumberType');
@@ -88,7 +87,6 @@ class Request extends CI_Controller {
         $data = array(
             'kd_req'		=> $kodeReq,
             'kd_barang'     => $kodeBrg,
-            'name'          => $nmBarang,
             'length_size'	=> $lengthSize,
             'width_size'	=> $widthSize,
             'lumber_type'	=> $lumberType,
