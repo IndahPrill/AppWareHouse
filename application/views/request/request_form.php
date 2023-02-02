@@ -30,11 +30,11 @@
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="kodeReq">Kode Permintaan</label>
-                                    <input type="text" class="form-control" name="kodeReq" id="kodeReq" placeholder="Masukkan ..." value="<?= $row->getKdReq ?>" readonly required>
+                                    <input type="text" class="form-control" name="kodeReq" id="kodeReq" placeholder="Masukkan ..." value="<?= $getKdReq ?>" readonly required>
                                 </div>
                                 <div class="form-group">
                                     <label for="kodeBrg">Kode Barang</label>
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group">
                                         <input type="text" class="form-control" name="kodeBrg" id="kodeBrg" placeholder="Masukkan ..." autocomplete="off" readonly required>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#list-kodebrg"><i class="fa fa-ellipsis-v"></i></button>
@@ -49,13 +49,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="lengthSize">Panjang</label>
-                                            <input type="number" class="form-control" name="lengthSize" id="lengthSize" placeholder="Masukkan ..." autocomplete="off" readonly required>
+                                            <input type="text" class="form-control" name="lengthSize" id="lengthSize" placeholder="Masukkan ..." autocomplete="off" readonly required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="widthSize">Lebar</label>
-                                            <input type="number" class="form-control" name="widthSize" id="widthSize" placeholder="Masukkan ..." autocomplete="off" readonly required>
+                                            <input type="text" class="form-control" name="widthSize" id="widthSize" placeholder="Masukkan ..." autocomplete="off" readonly required>
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                                 <thead>
                                     <tr>
                                         <th rowspan="2">#</th>
-                                        <th rowspan="2">Nama</th>
+                                        <th rowspan="2">Nama Barang</th>
                                         <th colspan="2">SIze</th>
                                         <th colspan="2">Kayu</th>
                                         <th rowspan="2">Jumlah</th>
@@ -115,7 +115,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <input type="hidden" id="getSubTotal">
+                            <input type="hidden" id="getTotalQty">
                             <button type="button" class="btn btn-info" id="saveReqBrg" data-toggle="modal" data-target="#saveListReqBrg"><i class="fa fa-save"></i>&nbsp;&nbsp;Simpan</button>
                         </div>
                     </div>
@@ -146,6 +146,8 @@
                             <th>Nama Barang</th>
                             <th>Panjang</th>
                             <th>Lebar</th>
+                            <th>Jenis</th>
+                            <th>Tipe</th>
                             <th>Aksi</th>
                         </thead>
                         <tbody id="dtKodeBrg">
@@ -164,6 +166,7 @@
 	<!-- Modal save barang -->
     <div class="modal fade" id="saveListReqBrg">
         <div class="modal-dialog">
+			<span id="loadingSImpan"></span>
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -177,7 +180,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" class="form-control pull-right" id="tglReqBrg" name="tglReqBrg" required>
+								<input type="text" class="form-control pull-right" id="tglReqBrg" name="tglReqBrg" placeholder="yyyy-mm-dd" required autocomplete="off">
 							</div>
 						</div>
 						<div class="form-group">
@@ -185,14 +188,14 @@
 							<select class="form-control" id="kdSup" name="kdSup" required></select>
 						</div>
 						<div class="form-group">
-							<label for="remark">Komentar</label>
-							<textarea class="form-control" id="remark" name="remark" placeholder="Masukkan ..." rows="2" required></textarea>
+							<label for="remark">Komentar (Opsional)</label>
+							<textarea class="form-control" id="remark" name="remark" placeholder="Masukkan ..." rows="2"></textarea>
 						</div>
-						<input type="hidden" name="kdPembelian" value="<?= $row->getKdReq; ?>">
+						<input type="hidden" name="kdReq" value="<?= $getKdReq; ?>">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Batal</button>
-						<button type="button" class="btn btn-success"><i class="fa fa-send"></i>&nbsp;&nbsp;Kirim</button>
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="closeSend"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Batal</button>
+						<button type="submit" class="btn btn-success" id="sendBrg"><i class="fa fa-send"></i>&nbsp;&nbsp;Kirim</button>
 					</div>
 				</form>
             </div>
@@ -208,8 +211,13 @@
 <?php $this->load->view('Template/Script') ?>
 <!-- Footer -->
 
+<script src="<?= base_url() ?>assets/bower_components/jquery-validation/jquery.validate.min.js"></script>
+<script src="<?= base_url() ?>assets/bower_components/jquery-validation/additional-methods.min.js"></script>
+
 <script type="text/javaScript">
     $(function() {
+		getDataMasterBarang()
+		displayDetailBarang()
 		getDataSupplier()
 
 		$("#tblReqBrg").DataTable({
@@ -222,13 +230,176 @@
 		$("#tblKdBrg").DataTable({
 			"responsive": true,
 			"autoWidth": false,
-			"pageLength": 5,
+			"pageLength": 10,
 			"lengthMenu": [5, 10, 20, 50],
 		})
 
 		$('#tglReqBrg').datepicker({
-			autoclose: true
+			autoclose: true,
+			format: 'yyyy-dd-mm'
 		})
+
+		$("#formBarang").validate({
+			rules: {
+				kodeReq: "required",
+				kodeBrg: "required",
+				nmBarang: "required",
+				lengthSize: "required",
+				widthSize: "required",
+				lumberType: "required",
+				speciesType: "required",
+				qtyReq: {
+					required: true,
+					min: 1,
+					max: 100
+				},
+			},
+			messages: {
+				kodeReq: "Tidak Boleh Kosong",
+				kodeBrg: "Tidak Boleh Kosong",
+				nmBarang: "Tidak Boleh Kosong",
+				lengthSize: "Tidak Boleh Kosong",
+				widthSize: "Tidak Boleh Kosong",
+				lumberType: "Tidak Boleh Kosong",
+				speciesType: "Tidak Boleh Kosong",
+				qtyReq: {
+					required: "Quantity Tidak Boleh Kosong",
+					min: "Harus Mengisi Mulai dari Angka 1",
+					max: "Jangan Melebihi 100"
+				},
+			},
+			errorElement: 'span',
+			errorPlacement: function(error, element) {
+				error.addClass('help-block');
+				element.closest('.form-group').append(error);
+			},
+			highlight: function(element, errorClass, validClass) {
+				$(element).addClass('is-invalid');
+			},
+			unhighlight: function(element, errorClass, validClass) {
+				$(element).removeClass('is-invalid');
+			},
+			submitHandler: function(form) {
+				let kodeReq = $("#kodeReq").val();
+				let kodeBrg = $("#kodeBrg").val();
+				let nmBarang = $("#nmBarang").val();
+				let lengthSize = $("#lengthSize").val();
+				let widthSize = $("#widthSize").val();
+				let lumberType = $("#lumberType").val();
+				let speciesType = $("#speciesType").val();
+				let qtyReq = $("#qtyReq").val();
+
+				console.log("kodeBrg : " + kodeBrg);
+				console.log("nmBarang : " + nmBarang);
+
+				if (kodeBrg == "" && nmBarang == "") {
+					Toast.fire({
+						icon: 'error',
+						title: 'Kode barang dan Nama barang harus di pilih!'
+					});
+				} else {
+					$.ajax({
+						type: "POST",
+						data: {
+							kodeReq: kodeReq,
+							kodeBrg: kodeBrg,
+							nmBarang: nmBarang,
+							lengthSize: lengthSize,
+							widthSize: widthSize,
+							lumberType: lumberType,
+							speciesType: speciesType,
+							qtyReq: qtyReq,
+						},
+						url: "<?= site_url('Request/req/postTmpReq') ?>",
+						dataType: "JSON",
+						success: function(json) {
+							displayDetailBarang()
+							$("#kodeReq").val("");
+							$("#kodeBrg").val("");
+							$("#nmBarang").val("");
+							$("#lengthSize").val("");
+							$("#widthSize").val("");
+							$("#lumberType").val("");
+							$("#speciesType").val("");
+							$("#qtyReq").val("");
+						}
+					});
+				}
+
+				return false;
+			}
+		});
+
+		$("#formSaveBrg").validate({
+			rules: {
+				tglReqBrg: "required",
+				kdSup: "required",
+				// remark: "required",
+			},
+			messages: {
+				tglReqBrg: "Tanggal Tidak Boleh Kosong",
+				kdSup: "Supplier Tidak Boleh Kosong",
+				// remark: "Remark Tidak Boleh Kosong",
+			},
+			errorElement: 'span',
+			errorPlacement: function(error, element) {
+				error.addClass('help-block');
+				element.closest('.form-group').append(error);
+			},
+			highlight: function(element, errorClass, validClass) {
+				$(element).addClass('is-invalid');
+			},
+			unhighlight: function(element, errorClass, validClass) {
+				$(element).removeClass('is-invalid');
+			},
+			submitHandler: function(form) {
+				let kdReq = "<?= $getKdReq; ?>";
+				let tglReqBrg = $("#tglReqBrg").val();
+				let kdSup = $("#kdSup").val();
+				let remark = $("#remark").val();
+				let totalQty = $("#getTotalQty").val();
+
+				$.ajax({
+					type: "POST",
+					data: {
+						kdReq: kdReq,
+						tglReqBrg: tglReqBrg,
+						kdSup: kdSup,
+						remark: remark,
+						totalQty: totalQty
+					},
+					url: "<?= site_url('Request/req/postReq') ?>",
+					dataType: "JSON",
+					beforeSend: function() {
+						$("#sendBrg").prop("disabled", true);
+						$("#closeSend").prop("disabled", true);
+
+						var loading = '<div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>';
+						$("#loadingSImpan").html(loading);
+					},
+					success: function(res) {
+						// console.log(hasil);
+						if (res.status) {
+							Toast.fire({
+								icon: 'success',
+								title: 'Berhasil Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						} else {
+							Toast.fire({
+								icon: 'error',
+								title: 'Gagal Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						}
+					}
+				});
+			}
+		});
 	})
 
 	const Toast = Swal.mixin({
@@ -259,5 +430,129 @@
 			}
 		});
 		return false;
+	}
+
+	function getDataMasterBarang() {
+		$.ajax({
+			url: "<?= site_url('Request/req/getMstrBrg') ?>",
+			async: false,
+			dataType: "JSON",
+			success: function (dt) {
+				let btnAdd = kode_barang = row = '';
+				for (let i = 0; i < dt.length; i++) {
+					var kode = (dt[i].kode < 10) ? '0'+dt[i].kode : '-';
+					var sub_kode = (dt[i].sub_kode < 10) ? '0'+dt[i].sub_kode : '-';
+					var sub_data = (dt[i].sub_data < 10) ? '0'+dt[i].sub_data : '-';
+					var name = (dt[i].name != "") ? dt[i].name : '-';
+					var length_size = (dt[i].length_size != "") ? dt[i].length_size : '-';
+					var width_size = (dt[i].width_size != "") ? dt[i].width_size : '-';
+					var lumber_type = (dt[i].lumber_type != "") ? dt[i].lumber_type : '-';
+					var species_type = (dt[i].species_type != "") ? dt[i].species_type : '-';
+
+					if (dt[i].sub_kode != "*") {
+						if (dt[i].sub_kode != '*' && dt[i].sub_data != '*') {
+							kode_barang = 'BRG' + kode + sub_kode + sub_data;
+							btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kode_barang + '\', \'' + name + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
+						} else {
+							kode_barang = 'BRG' + kode + sub_kode;
+							btnAdd = "";
+						}
+					} else {
+						kode_barang = 'BRG' + kode;
+						btnAdd = "";
+					}
+
+					row += '<tr>' +
+								'<td>' + (i + 1) + '</td>' +
+								'<td>' + kode_barang + '</td>' +
+								'<td>' + name + '</td>' +
+								'<td>' + length_size + '</td>' +
+								'<td>' + width_size + '</td>' +
+								'<td>' + lumber_type + '</td>' +
+								'<td>' + species_type + '</td>' +
+								'<td style="text-align: center;">' + btnAdd + '</td>' +
+							'</tr>';
+				}
+				$('#dtKodeBrg').html(row);
+			}
+		})
+	}
+
+	function getDisplayData(kode_barang, name, length_size, width_size, lumber_type, species_type) {
+		$("#kodeBrg").val(kode_barang);
+		$("#nmBarang").val(name);
+		$("#lengthSize").val(length_size);
+		$("#widthSize").val(width_size);
+		$("#lumberType").val(lumber_type);
+		$("#speciesType").val(species_type);
+
+		$("#list-kodebrg").modal("hide");
+	}
+
+	function displayDetailBarang() {
+		let kodeReq = "<?= $getKdReq; ?>";
+		$.ajax({
+			type: "POST",
+			url: "<?= site_url('Request/req/GetDtlBarang') ?>",
+			data: {
+				kodeReq: kodeReq
+			},
+			dataType: "json",
+			async: false,
+			success: function(dt) {
+				// console.log(dt);
+				if (!dt) {
+					$("#simpan").addClass("disabled");
+					$("#simpan").removeAttr("data-toggle");
+				} else {
+					$("#simpan").removeClass("disabled");
+					$("#simpan").attr("data-toggle", "modal");
+				}
+
+				let row = rows = '';
+				let sum = 0;
+				for (let i = 0; i < dt.length; i++) {
+					row += `<tr>
+								<td>` + (i + 1) + `</td>
+								<td>` + dt[i].name + `</td>
+								<td>` + dt[i].length_size + `</td>
+								<td>` + dt[i].width_size + `</td>
+								<td>` + dt[i].lumber_type + `</td>
+								<td>` + dt[i].species_type + `</td>
+								<td>` + dt[i].qty + `</td>
+								<td>
+									<button type="button" class="btn btn-xs btn-danger" onclick="delTmpReq('` + dt[i].id_tem_req + `')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</button>
+								</td>
+							</tr>`;
+					sum += parseInt(dt[i].qty);
+				}
+				$("#getTotalQty").val(sum);
+				rows += `<tr>
+							<th colspan="6" style="text-align: right;"><strong>Total Qty</strong></th>
+							<th colspan="2" style="text-align: left;"><strong>` + sum + `</strong></th>
+						</tr>`;
+				$('#dtReqBrg').html(row);
+				$('#totReqBrg').html(rows);
+			}
+		});
+		return false;
+	}
+
+	function delTmpReq(id_tem_req) {
+		$.ajax({
+			type: "POST",
+			data: {
+				idTemReq: id_tem_req
+			},
+			url: "<?= site_url('Request/req/delTmpReq'); ?>",
+			dataType: "JSON",
+			success: function(a) {
+				Toast.fire({
+					icon: 'success',
+					title: 'Berhasil Hapus Permintaan Barang!'
+				});
+				displayDetailBarang()
+			}
+		});
 	}
 </script>
