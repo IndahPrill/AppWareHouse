@@ -77,14 +77,29 @@ class Request extends CI_Controller {
 
 	public function getMstrBrg()
 	{
-		$data = $this->request_m->getMstrBrg();
-		echo json_encode($data);
+		$action = $this->request_m->getMstrBrg();
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
 	}
 
 	public function postTmpReq()
 	{
 		$kodeReq		= $this->input->post('kodeReq');
         $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
         $lengthSize		= $this->input->post('lengthSize');
         $widthSize		= $this->input->post('widthSize');
         $lumberType		= $this->input->post('lumberType');
@@ -94,6 +109,7 @@ class Request extends CI_Controller {
         $data = array(
             'kd_req'		=> $kodeReq,
             'kd_barang'     => $kodeBrg,
+            'nama_brg'      => $nmBarang,
             'length_size'	=> $lengthSize,
             'width_size'	=> $widthSize,
             'lumber_type'	=> $lumberType,

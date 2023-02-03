@@ -54,7 +54,7 @@ class Request_m extends CI_Model
 				kode
 				, sub_kode
 				, sub_data
-				, `name`
+				, nama_brg
 				, length_size
 				, width_size
 				, lumber_type
@@ -74,7 +74,7 @@ class Request_m extends CI_Model
 				'kode' 			=> $val['kode'],
 				'sub_kode' 		=> $val['sub_kode'],
 				'sub_data' 		=> $val['sub_data'],
-				'name' 			=> $val['name'],
+				'nama_brg'		=> $val['nama_brg'],
 				'length_size' 	=> $val['length_size'],
 				'width_size' 	=> $val['width_size'],
 				'lumber_type' 	=> $val['lumber_type'],
@@ -174,7 +174,7 @@ class Request_m extends CI_Model
 			"SELECT 
 				kd_req,
 				kd_barang,
-				`name`,
+				nama_brg,
 				length_size,
 				width_size,
 				lumber_type,
@@ -343,7 +343,7 @@ class Request_m extends CI_Model
 		$qry = "SELECT 
 					a.id_dtl_req
 					, a.kd_req
-					, b.name
+					, b.nama_brg
 					, a.kd_barang
 					, a.length_size
 					, a.width_size
@@ -376,7 +376,7 @@ class Request_m extends CI_Model
 								ELSE
 									sub_data
 							END AS sub_data
-							, name
+							, nama_brg
 						FROM m_barang
 						WHERE is_active != '1'
 					) b ON concat('BRG',b.kode,b.sub_kode,b.sub_data) = a.kd_barang
