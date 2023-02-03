@@ -206,3 +206,46 @@ DROP COLUMN `supplier_id`;
 ALTER TABLE `task`.`activity_log_req` 
 ADD COLUMN `length_size` varchar(255) NOT NULL AFTER `kd_barang`,
 ADD COLUMN `width_size` varchar(255) NOT NULL AFTER `length_size`;
+
+ALTER TABLE `activity_log_req` 
+ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `status_req`;
+
+ALTER TABLE `task`.`activity_log_req` 
+CHANGE COLUMN `kd_supplier` `supplier_id` varchar(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kd_req`;
+
+CREATE TABLE `activity_log_barang` (
+  `id_log_barang` int(11) NOT NULL AUTO_INCREMENT,
+  `date_log` datetime NOT NULL,
+	`user_id` int(11) NOT NULL,
+  `kd_req` varchar(25) NOT NULL,
+  `supplier_id` varchar(25) NOT NULL,
+  `kd_barang` varchar(8) NOT NULL,
+  `qty_tot` int(11) NOT NULL,
+  `qty_confir` int(11) DEFAULT NULL,
+  `qty_req` int(11) DEFAULT NULL,
+  `qty_cancel` int(11) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
+  `status_log` int(11) DEFAULT NULL,
+	`created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_log_barang`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `task`.`d_request` 
+MODIFY COLUMN `qty_confir` int(11) NOT NULL AFTER `qty_tot`,
+MODIFY COLUMN `qty_req` int(11) NOT NULL AFTER `qty_confir`,
+MODIFY COLUMN `qty_cancel` int(11) NOT NULL AFTER `qty_req`;
+
+ALTER TABLE `task`.`m_stock` 
+CHANGE COLUMN `id_supplier` `supplier_id` int(11) NOT NULL AFTER `id_stock`;
+
+ALTER TABLE `task`.`m_stock` 
+DROP COLUMN `date_in`;
+
+ALTER TABLE `task`.`m_stock` 
+DROP COLUMN `kd_gudang`;
+
+ALTER TABLE `task`.`d_request` 
+DROP COLUMN `kd_gudang`;
+
+ALTER TABLE `task`.`d_request` 
+ADD COLUMN `nama_brg` varchar(255) NOT NULL AFTER `kd_barang`;

@@ -440,9 +440,9 @@
 			success: function (dt) {
 				let btnAdd = kode_barang = row = '';
 				for (let i = 0; i < dt.length; i++) {
-					var kode = (dt[i].kode < 10) ? '0'+dt[i].kode : '-';
-					var sub_kode = (dt[i].sub_kode < 10) ? '0'+dt[i].sub_kode : '-';
-					var sub_data = (dt[i].sub_data < 10) ? '0'+dt[i].sub_data : '-';
+					var kode = (dt[i].kode < 10) ? '0'+dt[i].kode : dt[i].kode;
+					var sub_kode = (dt[i].sub_kode < 10) ? '0'+dt[i].sub_kode : dt[i].sub_kode;
+					var sub_data = (dt[i].sub_data < 10) ? '0'+dt[i].sub_data : dt[i].sub_data;
 					var name = (dt[i].name != "") ? dt[i].name : '-';
 					var length_size = (dt[i].length_size != "") ? dt[i].length_size : '-';
 					var width_size = (dt[i].width_size != "") ? dt[i].width_size : '-';

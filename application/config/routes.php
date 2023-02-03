@@ -79,6 +79,13 @@ $route['Request/req/GetDtlBarang']	= 'Request/GetDtlBarang';
 $route['Request/req/delTmpReq']		= 'Request/delTmpReq';
 $route['Request/req/postReq']		= 'Request/postReq';
 $route['Request/req/dtlReq']        = 'Request/dtlReq';
+$route['Request/req/getDataReq']	= 'Request/getDataReq';
+$route['Request/req/cancelReq']		= 'Request/cancelReq';
+$route['Request/req/getMasterReq']	= 'Request/getMasterReq';
+$route['Request/req/getDtlReq']		= 'Request/getDtlReq';
+$route['Request/req/getQtyReq']		= 'Request/getQtyReq';
+$route['Request/req/insertReq']		= 'Request/insertReq';
+$route['Request/req/batalReq']		= 'Request/batalReq';
 
 // Stock
 $route['Stock/sto/getListStock']	= 'Stock/getListStock';
