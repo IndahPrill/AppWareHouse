@@ -144,4 +144,163 @@ class Request extends CI_Controller {
 
 		echo json_encode($response);
 	}
+
+	public function getDataReq()
+	{
+		$action = $this->request_m->getDataReq();
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function cancelReq()
+	{
+		$kd_req   		= $this->input->post('kd_req');
+		$dateCancel     = date("Y-m-d", strtotime($this->input->post('dateCancel')));
+        $remarkCancel   = $this->input->post('remarkCancel');
+
+		$action = $this->request_m->cancelReq($kd_req, $dateCancel, $remarkCancel);
+        
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success'
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail'
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function getMasterReq()
+	{
+		$kd_req	= $this->input->post('kd_req');
+        $action = $this->request_m->getMasterReq($kd_req);
+        if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function getDtlReq()
+	{
+		$kd_req	= $this->input->post('kd_req');
+		$action = $this->request_m->getDtlReq($kd_req);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function getQtyReq()
+	{
+		$id_dtl_req	= $this->input->post('id_dtl_req');
+		$action = $this->request_m->getQtyReq($id_dtl_req);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function insertReq()
+    {
+        $id_dtl_req		= $this->input->post('id_dtl_req');
+        $qtySendReq		= $this->input->post('qtySendReq');
+        $dateSendReq	= date("Y-m-d", strtotime($this->input->post('dateSendReq')));
+        $remark			= $this->input->post('remarkReq');
+
+        $action = $this->request_m->insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark);
+        if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+    }
+
+    public function batalReq()
+    {
+        $id_dtl_btl	= $this->input->post('id_dtl_btl');
+        $qty        = $this->input->post('qtyBatal');
+        $tgl        = date("Y-m-d", strtotime($this->input->post('dateBtlReq')));
+        $remark     = $this->input->post('remarkBatal');
+
+        $action = $this->request_m->batalReq($id_detail, $qty, $tgl, $remark);
+        if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+    }
 }
