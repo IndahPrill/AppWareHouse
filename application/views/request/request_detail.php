@@ -251,7 +251,7 @@
 
 				$("#kd_req").val(dt.data.kd_req);
 				$("#date_req").val(date_req);
-				$("#nameSup").val(dt.data.name);
+				$("#nameSup").val(dt.data.nama_brg);
 			}
 		})
 	}
@@ -279,7 +279,7 @@
 
 					row += `<tr>
 								<td>` + (i + 1) + `</td>
-								<td>` + dt.data[i].name + `</td>
+								<td>` + dt.data[i].nama_brg + `</td>
 								<td>` + dt.data[i].length_size + `</td>
 								<td>` + dt.data[i].width_size + `</td>
 								<td>` + dt.data[i].lumber_type + `</td>
