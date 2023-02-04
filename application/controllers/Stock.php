@@ -11,24 +11,36 @@ class Stock extends CI_Controller {
 	
 	}
 
+	public function getListStock()
+	{
+		$data['title'] = "Daftar Stock";
+
+		$this->template->load('Template/HomePage', 'stock/daftar', $data);
+	}
+
     public function stock_in_data()
     {
-        $data['row'] = $this->stock_m->get_stock_in()->result();
-        $this->template->load('template', 'stock_in/stock_in_data', $data);
+        $data['title'] = "Stock In";
+        // $data['row'] = $this->stock_m->get_stock_in()->result();
+        $data['row'] = '';
+        $this->template->load('Template/HomePage', 'stock/stock_in/stock_in_data', $data);
     }
 
     public function stock_out_data()
     {
-        $data['row'] = $this->stock_m->get_stock_out()->result();
-        $this->template->load('template', 'stock_out/stock_out_data', $data);
+        $data['title'] = "Stock Out";
+        $data['row'] = '';
+        // $data['row'] = $this->stock_m->get_stock_out()->result();
+        $this->template->load('Template/HomePage', 'stock/stock_out/stock_out_data', $data);
     }
 
     public function stock_out_add()
     {
         $item = $this->item_m->get()->result();
         $supplier = $this->supplier_m->get()->result();
-        $data = ['item' => $item, 'supplier' => $supplier];
-        $this->template->load('template', 'stock_out/stock_out_form', $data);
+        // $data = ['item' => $item, 'supplier' => $supplier];
+        $data = ['item' => '', 'supplier' => ''];
+        $this->template->load('Template/HomePage', 'stock/stock_out/stock_out_form', $data);
     }
 
     public function stock_in_add()
@@ -36,7 +48,7 @@ class Stock extends CI_Controller {
         $item = $this->item_m->get()->result();
         $supplier = $this->supplier_m->get()->result();
         $data = ['item' => $item, 'supplier' => $supplier];
-        $this->template->load('template', 'stock_in/stock_in_form', $data);
+        $this->template->load('Template/HomePage', 'stock/stock_in/stock_in_form', $data);
     }
 
 

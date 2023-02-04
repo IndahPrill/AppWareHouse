@@ -12,29 +12,35 @@ class Request extends CI_Controller {
 
 	public function index()
 	{
-		$data['row']=$this->request_m->get();
-		$this->template->load('template', 'request/request_data', $data);
+		$data['title'] 		= "Permintaan Barang";
+		$data['row']		= $this->request_m->get();
+
+		$this->template->load('Template/HomePage', 'request/request_data', $data);
 	}
 
 	public function add()
 	{
 		$item = new stdClass();
 		$item->request_id = null;
+		$item->getKdReq = null;
 		$item->jenis = null;
 		$item->jumlah = null;
 		$item->keterangan = null;
         $item->ukuran = null;
         $item->date = null;
         $item->status = null;
+		
+		$getKdReq = $this->request_m->getKdReq();
 		$data = array(
-			'page' => 'add',
-			'row' => $item
+			'title' 	=> 'Tambah Permintaan Barang',
+			'page' 		=> 'add',
+			'row' 		=> $item,
+			'getKdReq' 	=> $getKdReq
 		);
-		$this->template->load('template', 'request/request_form', $data);
+		$this->template->load('Template/HomePage', 'request/request_form', $data);
 	}
 
-
-public function process()
+	public function process()
 	{
 		$post= $this->input->post(null, TRUE);
 		
@@ -46,6 +52,7 @@ public function process()
         }
         redirect('request');	
     }
+
     public function confirm($id)
 	{
 		$this->request_m->confirm($id);
@@ -53,5 +60,83 @@ public function process()
 			echo "<script>alert('Data Berhasil Diubah');</script>";
 		}
 		echo "<script>window.location='".site_url('request')."';</script>";	
+	}
+
+	public function getSupplier()
+	{
+		$data = $this->request_m->getSupplier();
+        echo json_encode($data);
+	}
+
+	public function getMstrBrg()
+	{
+		$data = $this->request_m->getMstrBrg();
+		echo json_encode($data);
+	}
+
+	public function postTmpReq()
+	{
+		$kodeReq		= $this->input->post('kodeReq');
+        $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
+        $lengthSize		= $this->input->post('lengthSize');
+        $widthSize		= $this->input->post('widthSize');
+        $lumberType		= $this->input->post('lumberType');
+        $speciesType	= $this->input->post('speciesType');
+        $qtyReq			= $this->input->post('qtyReq');
+
+        $data = array(
+            'kd_req'		=> $kodeReq,
+            'kd_barang'     => $kodeBrg,
+            'name'          => $nmBarang,
+            'length_size'	=> $lengthSize,
+            'width_size'	=> $widthSize,
+            'lumber_type'	=> $lumberType,
+            'species_type'	=> $speciesType,
+            'qty'			=> $qtyReq,
+        );
+
+        $response = $this->request_m->postData('tem_req', $data);
+
+        echo json_encode($response);
+	}
+
+	public function GetDtlBarang()
+	{
+		$kodeReq = $this->input->post('kodeReq');
+		$data = $this->request_m->GetDtlBarang($kodeReq);
+        echo json_encode($data);
+	}
+
+	public function delTmpReq()
+	{
+		$idTemReq = $this->input->post('idTemReq');
+		$data = $this->request_m->delTmpReq('tem_req',$idTemReq);
+        echo json_encode($data);
+	}
+
+	public function postReq()
+	{
+		$kodeReq	= $this->input->post('kdReq');
+		$tglReqBrg	= $this->input->post('tglReqBrg');
+		$kdSup		= $this->input->post('kdSup');
+		$remark		= $this->input->post('remark');
+		$totalQty	= $this->input->post('totalQty');
+
+		$action = $this->request_m->postReq($kodeReq, $tglReqBrg, $kdSup, $remark, $totalQty);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success'
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail'
+			);
+		}
+
+		echo json_encode($response);
 	}
 }
