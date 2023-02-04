@@ -14,11 +14,9 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-					<?php if ($this->session->userdata('level') >= 2) { ?>
-                    <li <?= $this->uri->segment(3) == "getListStock" ? 'class="active"' : ''; ?> >
-                        <a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-circle-o"></i> Daftar Stock</a>
-                    </li>
-					<?php } ?>
+					<li <?= $this->uri->segment(3) == "getListStock" ? 'class="active"' : ''; ?> >
+						<a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-circle-o"></i> Daftar Stock</a>
+					</li>
 					<?php if ($this->session->userdata('level') <= 2) { ?>
                     <li <?= $this->uri->segment(3) == "stockIn" ? 'class="active"' : ''; ?> >
                         <a href="<?= site_url('Stock/sto/stockIn') ?>"><i class="fa fa-circle-o"></i> Stock Masuk</a>
@@ -32,24 +30,24 @@
                 </ul>
             </li>
 
-            <?php if ($this->session->userdata('level') >= 2) { ?>
             <li class="<?= $this->uri->segment(2) == "req" ? 'active' : ''; ?> treeview">
                 <a href="#">
-                    <i class="fa fa-exchange"></i> <span>Permintaan Barang</span>
+					<i class="fa fa-exchange"></i> <span>Permintaan Barang</span>
                     <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
+						<i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?= $this->uri->segment(3) == "getListReq" ? 'class="active"' : ''; ?> >
-                        <a href="<?= site_url('Request/req/getListReq') ?>"><i class="fa fa-circle-o"></i> Daftar</a>
-                    </li>
-                    <li <?= $this->uri->segment(3) == "createReq" ? 'class="active"' : ''; ?> >
-                        <a href="<?= site_url('Request/req/createReq') ?>"><i class="fa fa-circle-o"></i> Tambah</a>
-                    </li>
+					<li <?= in_array($this->uri->segment(3), array("getListReq", "dtlReq")) ? 'class="active"' : ''; ?> >
+						<a href="<?= site_url('Request/req/getListReq') ?>"><i class="fa fa-circle-o"></i> Daftar</a>
+					</li>
+					<?php if (in_array($this->session->userdata('level'), array(1,3))) { ?>
+					<li <?= $this->uri->segment(3) == "createReq" ? 'class="active"' : ''; ?> >
+						<a href="<?= site_url('Request/req/createReq') ?>"><i class="fa fa-circle-o"></i> Tambah</a>
+					</li>
+					<?php } ?>
                 </ul>
             </li>
-            <?php } ?>
 			
 			<?php if ($this->session->userdata('level') <= 2) { ?>
 			<li class="<?= $this->uri->segment(2) == "sup" ? 'active' : ''; ?> treeview">

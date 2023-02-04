@@ -314,7 +314,7 @@
 						dataType: "JSON",
 						success: function(json) {
 							displayDetailBarang()
-							$("#kodeReq").val("");
+							// $("#kodeReq").val("");
 							$("#kodeBrg").val("");
 							$("#nmBarang").val("");
 							$("#lengthSize").val("");
@@ -438,21 +438,24 @@
 			async: false,
 			dataType: "JSON",
 			success: function (dt) {
+				console.log(dt.data)
 				let btnAdd = kode_barang = row = '';
-				for (let i = 0; i < dt.length; i++) {
-					var kode = (dt[i].kode < 10) ? '0'+dt[i].kode : '-';
-					var sub_kode = (dt[i].sub_kode < 10) ? '0'+dt[i].sub_kode : '-';
-					var sub_data = (dt[i].sub_data < 10) ? '0'+dt[i].sub_data : '-';
-					var name = (dt[i].name != "") ? dt[i].name : '-';
-					var length_size = (dt[i].length_size != "") ? dt[i].length_size : '-';
-					var width_size = (dt[i].width_size != "") ? dt[i].width_size : '-';
-					var lumber_type = (dt[i].lumber_type != "") ? dt[i].lumber_type : '-';
-					var species_type = (dt[i].species_type != "") ? dt[i].species_type : '-';
+				for (let i = 0; i < dt.data.length; i++) {
+					var kode = (dt.data[i].kode < 10) ? '0'+dt.data[i].kode : dt.data[i].kode;
+					var sub_kode = (dt.data[i].sub_kode < 10) ? '0'+dt.data[i].sub_kode : dt.data[i].sub_kode;
+					var sub_data = (dt.data[i].sub_data < 10) ? '0'+dt.data[i].sub_data : dt.data[i].sub_data;
+					var nama_brg = (dt.data[i].nama_brg != "") ? dt.data[i].nama_brg : '-';
+					var length_size = (dt.data[i].length_size != "") ? dt.data[i].length_size : '-';
+					var width_size = (dt.data[i].width_size != "") ? dt.data[i].width_size : '-';
+					var lumber_type = (dt.data[i].lumber_type != "") ? dt.data[i].lumber_type : '-';
+					var species_type = (dt.data[i].species_type != "") ? dt.data[i].species_type : '-';
 
-					if (dt[i].sub_kode != "*") {
-						if (dt[i].sub_kode != '*' && dt[i].sub_data != '*') {
+					// console.log(nama_brg);
+
+					if (dt.data[i].sub_kode != "*") {
+						if (dt.data[i].sub_kode != '*' && dt.data[i].sub_data != '*') {
 							kode_barang = 'BRG' + kode + sub_kode + sub_data;
-							btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kode_barang + '\', \'' + name + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
+							btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kode_barang + '\', \'' + nama_brg + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
 						} else {
 							kode_barang = 'BRG' + kode + sub_kode;
 							btnAdd = "";
@@ -465,7 +468,7 @@
 					row += '<tr>' +
 								'<td>' + (i + 1) + '</td>' +
 								'<td>' + kode_barang + '</td>' +
-								'<td>' + name + '</td>' +
+								'<td>' + nama_brg + '</td>' +
 								'<td>' + length_size + '</td>' +
 								'<td>' + width_size + '</td>' +
 								'<td>' + lumber_type + '</td>' +
@@ -478,9 +481,9 @@
 		})
 	}
 
-	function getDisplayData(kode_barang, name, length_size, width_size, lumber_type, species_type) {
+	function getDisplayData(kode_barang, nama_brg, length_size, width_size, lumber_type, species_type) {
 		$("#kodeBrg").val(kode_barang);
-		$("#nmBarang").val(name);
+		$("#nmBarang").val(nama_brg);
 		$("#lengthSize").val(length_size);
 		$("#widthSize").val(width_size);
 		$("#lumberType").val(lumber_type);
@@ -514,7 +517,7 @@
 				for (let i = 0; i < dt.length; i++) {
 					row += `<tr>
 								<td>` + (i + 1) + `</td>
-								<td>` + dt[i].name + `</td>
+								<td>` + dt[i].nama_brg + `</td>
 								<td>` + dt[i].length_size + `</td>
 								<td>` + dt[i].width_size + `</td>
 								<td>` + dt[i].lumber_type + `</td>

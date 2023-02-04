@@ -54,7 +54,7 @@ class Request_m extends CI_Model
 				kode
 				, sub_kode
 				, sub_data
-				, `name`
+				, nama_brg
 				, length_size
 				, width_size
 				, lumber_type
@@ -74,7 +74,7 @@ class Request_m extends CI_Model
 				'kode' 			=> $val['kode'],
 				'sub_kode' 		=> $val['sub_kode'],
 				'sub_data' 		=> $val['sub_data'],
-				'name' 			=> $val['name'],
+				'nama_brg'		=> $val['nama_brg'],
 				'length_size' 	=> $val['length_size'],
 				'width_size' 	=> $val['width_size'],
 				'lumber_type' 	=> $val['lumber_type'],
@@ -174,7 +174,7 @@ class Request_m extends CI_Model
 			"SELECT 
 				kd_req,
 				kd_barang,
-				`name`,
+				nama_brg,
 				length_size,
 				width_size,
 				lumber_type,
@@ -208,7 +208,8 @@ class Request_m extends CI_Model
                 'width_size'   	=> $getTemReq[$i]['width_size'],
                 'lumber_type'	=> $getTemReq[$i]['lumber_type'],
                 'species_type'	=> $getTemReq[$i]['species_type'],
-                'qty_tot'		=> $getTemReq[$i]['qty']
+                'qty_tot'		=> $getTemReq[$i]['qty'],
+                'qty_confir'	=> $getTemReq[$i]['qty']
             );
             array_push($datadetail, $detail);
         }
@@ -230,7 +231,7 @@ class Request_m extends CI_Model
 						, $getTemReq[$i]['lumber_type']
 						, $getTemReq[$i]['species_type']
 						, $getTemReq[$i]['qty']
-						, '0'
+						, $getTemReq[$i]['qty']
 						, '0'
 						, '0'
 						, $remark
@@ -240,6 +241,268 @@ class Request_m extends CI_Model
 
             $this->db->delete("tem_req", array('kd_req' => $kodeReq)); // hapus data di tabel sementara
             return true;
+        } else {
+            return false;
+        }
+	}
+
+	public function getDataReq()
+	{
+		$qry = $this->db->query(
+            "SELECT 
+                a.kd_req
+                , a.date_req
+                , c.name
+                , sum(b.qty_tot) qty_tot
+                , sum(b.qty_confir) qty_confir
+                , sum(b.qty_req) qty_req
+                , sum(b.qty_cancel) qty_cancel
+                , a.total_req
+                , b.status_req
+            FROM 
+                m_request a
+                LEFT JOIN d_request b ON a.kd_req = b.kd_req
+                LEFT JOIN supplier c ON a.supplier_id = c.supplier_id
+            WHERE a.is_active != '1'
+            GROUP BY a.kd_req
+            ORDER BY a.date_req DESC, b.status_req ASC"
+        )->result_array();
+
+        if ($qry) {
+            return $qry;
+        } else {
+            return false;
+        }
+	}
+
+	public function cancelReq($kd_req, $dateCancel, $remarkCancel)
+	{
+		$qry = "SELECT 
+                    a.kd_req
+                    , a.kd_barang
+					, sum(b.qty_tot) qty_tot
+					, sum(b.qty_confir) qty_confir
+					, sum(b.qty_req) qty_req
+                    , b.supplier_id
+                FROM 
+					d_request a
+                    LEFT JOIN m_request b ON b.kd_req = a.kd_req
+                WHERE
+                    a.is_active != ?
+                    AND a.kd_req = ?";
+        $res = $this->db->query($qry, array('1', $kd_req))->row();
+
+        $kdBarang   = $res->kd_barang;
+        $supplierId = $res->supplier_id;
+        $qtyTot  	= $res->qty_tot;
+        $qtyConfir  = $res->qty_confir;
+        $qtyReq   	= $res->qty_req;
+        $date_log 	= $dateCancel . " " . date("H:i:s");
+
+        if ($qtyTot != '0' && $qtyConfir != '0' && $qtyReq == '0') {
+            $this->db->where('kd_req', $kd_req);
+            $req = $this->db->update('m_request', array('status' => '1'));
+            if ($req) {
+                if ($this->db->affected_rows() > 0) {
+                    activity_log_barang($date_log, $kd_req, $supplierId, $kdBarang, $qtyTot, $qtyConfir, $qtyReq, '0', $remarkCancel, '0');
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                false;
+            }
+        } else {
+            return false;
+        }
+	}
+
+	public function getMasterReq($kd_req)
+	{
+		$qry = "SELECT 
+					a.kd_req
+					, a.date_req
+					, b.name
+				FROM
+					m_request a
+					LEFT JOIN supplier b ON b.supplier_id = a.supplier_id
+				WHERE
+					a.is_active != ?
+					AND a.kd_req = ?";
+        $res = $this->db->query($qry, array('1', $kd_req))->row();
+
+        if ($res) {
+            return $res;
+        } else {
+            return false;
+        }
+	}
+
+	public function getDtlReq($kd_req)
+	{
+		$qry = "SELECT 
+					a.id_dtl_req
+					, a.kd_req
+					, b.nama_brg
+					, a.kd_barang
+					, a.length_size
+					, a.width_size
+					, a.lumber_type
+					, a.species_type
+					, a.qty_tot
+					, a.qty_confir
+					, a.qty_req
+					, a.qty_cancel
+					, a.status_req
+				FROM
+					d_request a
+					LEFT JOIN (
+						SELECT  
+							CASE 
+								WHEN kode < 10 THEN
+									CONCAT('0',kode)
+								ELSE
+									kode
+							END AS kode
+							, CASE 
+								WHEN sub_kode < 10 THEN
+									CONCAT('0',sub_kode)
+								ELSE
+									sub_kode
+							END AS sub_kode
+							, CASE 
+								WHEN sub_data < 10 THEN
+									CONCAT('0',sub_data)
+								ELSE
+									sub_data
+							END AS sub_data
+							, nama_brg
+						FROM m_barang
+						WHERE is_active != '1'
+					) b ON concat('BRG',b.kode,b.sub_kode,b.sub_data) = a.kd_barang
+				WHERE
+					a.is_active != ?
+					AND a.kd_req = ?";
+        $res = $this->db->query($qry, array('1', $kd_req))->result_array();
+
+        if ($res) {
+            return $res;
+        } else {
+            return false;
+        }
+	}
+
+	public function getQtyReq($id_dtl_req)
+	{
+		$qry = $this->db->get_where("d_request", array("id_dtl_req" => $id_dtl_req))->result_array();
+
+        if ($qry) {
+            return $qry;
+        } else {
+            return false;
+        }
+	}
+
+	public function insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark)
+	{
+		$qry = $this->db->query(
+            "SELECT 
+                MAX(SUBSTR(kd_req, 10, 5)) AS kode,
+                SUBSTR(kd_req, 4, 2) AS day,
+                SUBSTR(kd_req, 6, 2) AS month,
+                SUBSTR(kd_req, 8, 2) as year
+            FROM m_stock
+            WHERE 
+                SUBSTR(kd_req, 4, 2) = if( DAY(CURDATE()) < 10, CONCAT('0',DAY(CURDATE())),DAY(CURDATE()))
+                AND SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
+                AND SUBSTR(kd_req, 8, 2) = SUBSTR(YEAR(CURDATE()), 3,2)"
+        )->result_array();
+
+        $urutan = (int) $qry[0]['kode'];
+        $urutan++;
+
+        $kode		= "STK";
+        $day        = date("d");
+        $month      = date("m");
+        $year       = substr(date("Y"), 2, 2);
+        $kdStock   	= $kode . $day . $month . $year . sprintf("%04s", $urutan);
+
+        // Query Bindings
+        $qry2 = "SELECT 
+                    a.kd_req
+                    , a.kd_barang
+                    , a.nama_brg
+                    , a.length_size
+					, a.width_size
+					, a.lumber_type
+					, a.species_type
+					, a.qty_tot
+					, a.qty_confir
+					, a.qty_req
+					, a.qty_cancel
+                    , b.supplier_id
+                FROM d_request a
+                    LEFT JOIN m_request b ON a.kd_req = b.kd_req AND a.is_active = b.is_active
+                WHERE
+                    a.is_active != ?
+                    AND a.id_dtl_req = ?";
+        $get = $this->db->query($qry2, array('1', $id_dtl_req))->row();
+
+		$date_log 	= $dateSendReq . " " . date("H:i:s");
+        $dateNow	= date("Y-m-d H:i:s");
+
+        $data = array(
+            'supplier_id'		=> $get->supplier_id,
+            'kd_req'			=> $get->kd_req,
+            'kd_barang'         => $get->kd_barang,
+            'nama_brg'  		=> $get->nama_brg,
+			'length_size'		=> $get->length_size,
+			'width_size'		=> $get->width_size,
+			'lumber_type'		=> $get->lumber_type,
+			'species_type'		=> $get->species_type,
+			'qty'				=> $qtySendReq,
+            'created_at'        => $dateNow
+        );
+
+        $insert = $this->db->insert("m_stock", $data);
+
+		$kd_req 		= $get->kd_req;
+		$supplier_id	= $get->supplier_id;
+		$kd_barang 		= $get->kd_barang;
+		$qtyTot 		= $get->qty_tot;
+		$qtyBatal 		= $get->qty_cancel;
+		$qtyReq 		= $get->qty_req - $qtySendReq;
+		$qtyConfir 		= $get->qty_confir + $qtySendReq;
+
+        if ($insert) {
+            if ($qtyBatal != '0' && $qtyReq != '0' && $qtyConfir != '0') {
+                $statusReq = '5'; // ada barang yang di batal dan barang masuk gudang
+            } else if ($qtyReq != $qtyTot && $qtyConfir != '0') {
+                $statusReq = '1'; // masuk gudang sebagian
+            } else if ($qtyReq == $qtyTot && $qtyConfir == '0' || $qtyBatal != '0' && $qtyReq != '0' && $qtyConfir == '0') {
+                $statusReq = '2'; // masuk gudang semua barang
+            } else {
+                $statusReq = '6'; // logika error
+            }
+
+            $data = array(
+                'qty_req'		=> $qtyReq,
+                'qty_confir'    => $qtyConfir,
+                'status_req'	=> $statusReq
+            );
+            $this->db->where('id_dtl_req', $id_dtl_req);
+            $qry3 = $this->db->update('d_request', $data);
+
+            if ($qry3) {
+                if ($this->db->affected_rows() > 0) {
+					activity_log_barang($date_log, $kd_req, $supplier_id, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, '0', $remark, $statusReq); // log barang
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

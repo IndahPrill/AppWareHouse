@@ -48,6 +48,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
+|
+| Contoh :
+| format url (Request/req/tampReq)
+| format to controller (Request/postReq) 
+| Request -> class di controller
+| postReq -> fuction di dalam controller
 */
 $route['default_controller']        = 'Dashboard/index';
 $route['404_override']              = 'Dashboard/error404';
@@ -72,6 +78,14 @@ $route['Request/req/postTmpReq']	= 'Request/postTmpReq';
 $route['Request/req/GetDtlBarang']	= 'Request/GetDtlBarang';
 $route['Request/req/delTmpReq']		= 'Request/delTmpReq';
 $route['Request/req/postReq']		= 'Request/postReq';
+$route['Request/req/dtlReq']        = 'Request/dtlReq';
+$route['Request/req/getDataReq']	= 'Request/getDataReq';
+$route['Request/req/cancelReq']		= 'Request/cancelReq';
+$route['Request/req/getMasterReq']	= 'Request/getMasterReq';
+$route['Request/req/getDtlReq']		= 'Request/getDtlReq';
+$route['Request/req/getQtyReq']		= 'Request/getQtyReq';
+$route['Request/req/insertReq']		= 'Request/insertReq';
+$route['Request/req/batalReq']		= 'Request/batalReq';
 
 // Stock
 $route['Stock/sto/getListStock']	= 'Stock/getListStock';
