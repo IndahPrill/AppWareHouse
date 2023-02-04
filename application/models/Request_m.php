@@ -158,10 +158,8 @@ class Request_m extends CI_Model
 
 	public function delTmpReq($table, $idTemReq)
 	{
-		$data = $this->db->get_where($table, array('id_tem' => $idTem))->result_array();
+		$action = $this->db->delete($table, array('id_tem_req' => $idTemReq));
         if ($this->db->affected_rows() > 0) {
-            activity_log("Tambah permintaan barang", "Delete", $data[0]["kd_req"]);
-            $action = $this->db->delete($table, array('id_tem' => $idTem));
             return $action;
         } else {
             return false;
@@ -209,7 +207,7 @@ class Request_m extends CI_Model
                 'lumber_type'	=> $getTemReq[$i]['lumber_type'],
                 'species_type'	=> $getTemReq[$i]['species_type'],
                 'qty_tot'		=> $getTemReq[$i]['qty'],
-                'qty_confir'	=> $getTemReq[$i]['qty']
+                'qty_req'	=> $getTemReq[$i]['qty']
             );
             array_push($datadetail, $detail);
         }
@@ -231,8 +229,8 @@ class Request_m extends CI_Model
 						, $getTemReq[$i]['lumber_type']
 						, $getTemReq[$i]['species_type']
 						, $getTemReq[$i]['qty']
-						, $getTemReq[$i]['qty']
 						, '0'
+						, $getTemReq[$i]['qty']
 						, '0'
 						, $remark
 						, '0');
@@ -477,9 +475,9 @@ class Request_m extends CI_Model
         if ($insert) {
             if ($qtyBatal != '0' && $qtyReq != '0' && $qtyConfir != '0') {
                 $statusReq = '5'; // ada barang yang di batal dan barang masuk gudang
-            } else if ($qtyReq != $qtyTot && $qtyConfir != '0') {
+            } else if ($qtyConfir != $qtyTot && $qtyReq != '0') {
                 $statusReq = '1'; // masuk gudang sebagian
-            } else if ($qtyReq == $qtyTot && $qtyConfir == '0' || $qtyBatal != '0' && $qtyReq != '0' && $qtyConfir == '0') {
+            } else if ($qtyConfir == $qtyTot && $qtyReq == '0' || $qtyBatal != '0' && $qtyConfir != '0' && $qtyReq == '0') {
                 $statusReq = '2'; // masuk gudang semua barang
             } else {
                 $statusReq = '6'; // logika error
