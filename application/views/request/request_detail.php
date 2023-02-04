@@ -241,7 +241,7 @@
 			dataType: "json",
 			async: false,
 			success: function(dt) {
-				// console.log(dt)
+				console.log(dt.data)
 				var date_req = "";
 
 				if (dt.data.date_req != "") {
@@ -251,13 +251,14 @@
 
 				$("#kd_req").val(dt.data.kd_req);
 				$("#date_req").val(date_req);
-				$("#nameSup").val(dt.data.nama_brg);
+				$("#nameSup").val(dt.data.name);
 			}
 		})
 	}
 
 	function displayData() {
 		let kd_req = sessionStorage.getItem("kd_req");
+		let usr = "<?= $this->session->userdata("level") ?>";
 		$.ajax({
 			type: "POST",
 			data: {
@@ -271,10 +272,18 @@
 				let row = rows = "";
 				let sum = 0;
 				for (let i = 0; i < dt.data.length; i++) {
+					console.log(usr)
 					if (dt.data[i].qty_req == '0') {
-						btnHide = "disabled";
+						btnHideAcc = "disabled";
+						btnHideBtl = "disabled";
 					} else {
-						btnHide = "";
+						if (usr == '3') {
+							btnHideAcc = "disabled";
+							btnHideBtl = "disabled";
+						} else {
+							btnHideAcc = "";
+							btnHideBtl = "";
+						}
 					}
 
 					row += `<tr>
@@ -287,22 +296,22 @@
 								<td style="widt.datah: 30%;">`;
 
 						if (dt.data[i].status_req == '0') {
-							row += `<span class="badge badge-info">Pengiriman</span>&nbsp;`;
+							row += `<button class="btn btn-xs btn-info"><span class="badge">Pengiriman</span></button>`;
 						}
 						if (dt.data[i].status_req == '1') {
-							row += `<span class="badge badge-warning">Masih ada sisa</span>&nbsp;`;
+							row += `<button class="btn btn-xs btn-warning"><span class="badge">Masih ada sisa</span></button>`;
 						}
 						if (dt.data[i].status_req == '2') {
-							row += `<span class="badge badge-success">Terpenuhi</span>&nbsp;`;
+							row += `<button class="btn btn-xs btn-success"><span class="badge">Terpenuhi</span></button>`;
 						}
 						if (dt.data[i].status_req == '3') {
-							row += `<span class="badge badge-warning">Batal sebagian</span>&nbsp;`;
+							row += `<button class="btn btn-xs btn-warning"><span class="badge">Batal sebagian</span></button>`;
 						}
 						if (dt.data[i].status_req == '4') {
-							row += `<span class="badge badge-danger">Batal</span>&nbsp;`;
+							row += `<button class="btn btn-xs btn-danger"><span class="badge">Batal</span></button>`;
 						}
 						if (dt.data[i].status_req == '5') {
-							row += `<span class="badge badge-warning">Masih ada sisa dan batal sebagian</span>`;
+							row += `<button class="btn btn-xs btn-warning"><span class="badge">Masih ada sisa dan batal sebagian</span></button>`;
 						}
 
 					row += `&nbsp;[` + dt.data[i].qty_req + `/` + dt.data[i].qty_confir + `/` + dt.data[i].qty_cancel + `/` + dt.data[i].qty_tot + `]&nbsp;<button type="button" class="btn btn-xs btn-default" data-toggle="popover" title="Rincian Quantity" data-content="Qty Permintaan = ` + dt.data[i].qty_req + `<br> Qty Konfirmasi = ` + dt.data[i].qty_confir + `<br> Qty Batal = ` + dt.data[i].qty_cancel + `<br> Qty Total = ` + dt.data[i].qty_tot + `" data-trigger="focus" onclick="showInfoQty(this)"><i class="fa fa-info-circle"></i></button>`;
@@ -310,8 +319,8 @@
 					row += `</td>
 								<td>` + dt.data[i].qty_tot + `</td>
 								<td style="widt.datah: 15%; text-align: center;">
-									<button type="button" class="btn btn-xs btn-success" ` + btnHide + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-kirimBarang"><i class="fa fa-plus-square"></i>&nbsp;&nbsp;Terima</button>&nbsp;
-									<button type="button" class="btn btn-xs btn-danger" ` + btnHide + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-batalBarang"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Retur</button>
+									<button type="button" class="btn btn-xs btn-success" ` + btnHideAcc + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-kirimBarang"><i class="fa fa-plus-square"></i>&nbsp;&nbsp;Terima</button>&nbsp;
+									<button type="button" class="btn btn-xs btn-danger" ` + btnHideBtl + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-batalBarang"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Batal</button>
 								</td>
 							</tr>`;
 					sum += parseInt(dt.data[i].qty_tot);
@@ -368,7 +377,7 @@
 
 				let qtyReq = parseInt(dt.data[0].qty_req);
 
-				console.log(qtyReq)
+				// console.log(qtyReq)
 
 				$("#formMasuk").validate({
 					rules: {
