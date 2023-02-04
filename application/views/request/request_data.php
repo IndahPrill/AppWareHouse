@@ -114,13 +114,14 @@
 	})
 
 	function displayData() {
+		let usr = "<?= $this->session->userdata("level") ?>";
 		$.ajax({
 			type: "GET",
 			url: "<?= site_url('Request/req/getDataReq') ?>",
 			dataType: "json",
 			async: false,
 			success: function(dt) {
-				console.log(dt.data.length);
+				console.log(dt.data);
 				let row = "";
 				for (let i = 0; i < dt.data.length; i++) {
 
@@ -132,10 +133,17 @@
 						date_req = "";
 					}
 
-					if (dt.data[i].qty_tot != dt.data[i].qty_req) {
-						btnHide = "disabled";
+					if (dt.data[i].qty_tot == dt.data[i].qty_confir) {
+						btnHideDtl = "";
+						btnHideBtl = "disabled";
 					} else {
-						btnHide = "";
+						if (usr == '3') {
+							btnHideDtl = "";
+							btnHideBtl = "disabled";
+						} else {
+							btnHideDtl = "";
+							btnHideBtl = "";
+						}
 					}
 
 					row += `<tr> 
@@ -145,20 +153,20 @@
 							<td>` + dt.data[i].name + `</td>
 							<td style="widt.datah: 20%">`;
 
-						if (dt.data[i].qty_tot == dt.data[i].qty_req) {
-							row += `<span class="badge badge-info">Pengiriman</span>&nbsp;&nbsp;`;
-						} else if (dt.data[i].qty_req == '0') {
-							row += `<span class="badge badge-success">Terpenuhi</span>&nbsp;&nbsp;`;
-						} else if (dt.data[i].qty_tot != dt.data[i].qty_req) {
-							row += `<span class="badge badge-warning">Masih ada sisa dan batal sebagian</span>`;
+						if (dt.data[i].qty_tot == dt.data[i].qty_req && dt.data[i].qty_confir == '0') {
+							row += `<button class="btn btn-xs btn-info"><span class="badge">Pengiriman</span></button>`;
+						} else if (dt.data[i].qty_confir == dt.data[i].qty_tot) {
+							row += `<button class="btn btn-xs btn-success"><span class="badge badge-success">Terpenuhi</span></button>`;
+						} else if (dt.data[i].qty_tot != dt.data[i].qty_confir && dt.data[i].qty_cancel != '0' ) {
+							row += `<button class="btn btn-xs btn-warning"><span class="badge badge-warning">Masih ada sisa dan batal sebagian</span></button>`;
 						}
 
-					row += `&nbsp;[` + dt.data[i].qty_tot + `/` + dt.data[i].qty_req + `]&nbsp;<button type="button" class="btn btn-xs btn-default" data-toggle="popover" title="Rincian Jumlah" data-content="Total Permintaan = ` + dt.data[i].qty_tot + ` <br> Total Setuju = ` + dt.data[i].qty_req + `" data-trigger="focus" onclick="showInfoQty(this)"><i class="fa fa-info-circle"></i></button>`;
+					row += `&nbsp;[` + dt.data[i].qty_tot + `/` + dt.data[i].qty_confir + `]&nbsp;<button type="button" class="btn btn-xs btn-default" data-toggle="popover" title="Rincian Jumlah" data-content="Total Permintaan = ` + dt.data[i].qty_tot + ` <br> Total Setuju = ` + dt.data[i].qty_confir + `" data-trigger="focus" onclick="showInfoQty(this)"><i class="fa fa-info-circle"></i></button>`;
 					row += `</td>
 							<td>` + dt.data[i].total_req + `</td>
 							<td>
-								<button class="btn btn-xs btn-primary" onclick="openDetail('` + dt.data[i].kd_req + `')"><i class="fa fa-folder"></i>&nbsp;&nbsp;Detil</button>&nbsp;&nbsp;
-								<button class="btn btn-xs btn-danger" ` + btnHide + ` onclick="cencelAll('` + dt.data[i].kd_req + `')" data-toggle="modal" data-target="#modal-cencel"><i class="fa fa-trash-alt"></i>&nbsp;&nbsp;Batal</button>
+								<button class="btn btn-xs btn-primary" `+ btnHideDtl +` onclick="openDetail('` + dt.data[i].kd_req + `')"><i class="fa fa-folder"></i>&nbsp;&nbsp;Detil</button>&nbsp;&nbsp;
+								<button class="btn btn-xs btn-danger" `+ btnHideBtl +` onclick="cencelAll('` + dt.data[i].kd_req + `')" data-toggle="modal" data-target="#modal-cencel"><i class="fa fa-trash"></i>&nbsp;&nbsp;Batal</button>
 							</td>
 						</tr>`;
 				}

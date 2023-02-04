@@ -89,6 +89,7 @@ $route['Request/req/batalReq']		= 'Request/batalReq';
 
 // Stock
 $route['Stock/sto/getListStock']	= 'Stock/getListStock';
+$route['Stock/sto/getTimeline']		= 'Stock/getTimeline';
 $route['Stock/sto/stockIn']			= 'Stock/stock_in_data';
 $route['Stock/sto/stockOut']		= 'Stock/stock_out_data';
 
