@@ -52,7 +52,8 @@ class Stock extends CI_Controller {
     }
 
 
-    public function process(){
+    public function process() 
+	{
         if(isset($_POST['in_add'])){
             $post = $this->input->post(null, TRUE);
             $this->stock_m->add_stock_in($post);
@@ -72,4 +73,46 @@ class Stock extends CI_Controller {
                 redirect('stock/out');	
         }
     }
+
+	public function getMstrStock() 
+	{
+		$action = $this->request_m->getMstrStock();
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function getTimeline() 
+	{
+		$kd_req 	= $this->input->post('kd_req');
+		$kd_barang 	= $this->input->post('kd_barang');
+		$action = $this->request_m->getTimeline($kd_req, $kd_barang);
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+
+		echo json_encode($response);
+	}
 }

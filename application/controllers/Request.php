@@ -98,6 +98,7 @@ class Request extends CI_Controller {
 	public function postTmpReq()
 	{
 		$kodeReq		= $this->input->post('kodeReq');
+		$kodeSto		= $this->input->post('kodeSto');
         $kodeBrg		= $this->input->post('kodeBrg');
         $nmBarang		= $this->input->post('nmBarang');
         $lengthSize		= $this->input->post('lengthSize');
@@ -108,6 +109,7 @@ class Request extends CI_Controller {
 
         $data = array(
             'kd_req'		=> $kodeReq,
+            'kd_stock'		=> $kodeSto,
             'kd_barang'     => $kodeBrg,
             'nama_brg'      => $nmBarang,
             'length_size'	=> $lengthSize,
@@ -140,11 +142,12 @@ class Request extends CI_Controller {
 	{
 		$kodeReq	= $this->input->post('kdReq');
 		$tglReqBrg	= $this->input->post('tglReqBrg');
-		$kdSup		= $this->input->post('kdSup');
+		// $kdSup		= $this->input->post('kdSup');
 		$remark		= $this->input->post('remark');
 		$totalQty	= $this->input->post('totalQty');
 
-		$action = $this->request_m->postReq($kodeReq, $tglReqBrg, $kdSup, $remark, $totalQty);
+		// $action = $this->request_m->postReq($kodeReq, $tglReqBrg, $kdSup, $remark, $totalQty);
+		$action = $this->request_m->postReq($kodeReq, $tglReqBrg, $remark, $totalQty);
 
 		if ($action) {
 			$response = array(
@@ -231,6 +234,9 @@ class Request extends CI_Controller {
 		$kd_req	= $this->input->post('kd_req');
 		$action = $this->request_m->getDtlReq($kd_req);
 
+		// print_r($action);
+		// die();
+
 		if ($action) {
 			$response = array(
 				'status' => true,
@@ -250,8 +256,12 @@ class Request extends CI_Controller {
 
 	public function getQtyReq()
 	{
-		$id_dtl_req	= $this->input->post('id_dtl_req');
-		$action = $this->request_m->getQtyReq($id_dtl_req);
+		// $id_dtl_req	= $this->input->post('id_dtl_req');
+		$kd_stock	= $this->input->post('kd_stock');
+		// $kd_req		= $this->input->post('kd_req');
+		$kd_barang	= $this->input->post('kd_barang');
+		// $action 	= $this->request_m->getQtyReq($id_dtl_req, $kd_req, $kd_stock, $kd_barang);
+		$action 	= $this->request_m->getQtyReq($kd_stock, $kd_barang);
 
 		if ($action) {
 			$response = array(
@@ -276,8 +286,11 @@ class Request extends CI_Controller {
         $qtySendReq		= $this->input->post('qtySendReq');
         $dateSendReq	= date("Y-m-d", strtotime($this->input->post('dateSendReq')));
         $remark			= $this->input->post('remarkReq');
+		$kd_stock		= $this->input->post('kd_stock');
+		$kd_req			= $this->input->post('kd_req');
+		$kd_barang		= $this->input->post('kd_barang');
 
-        $action = $this->request_m->insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark);
+        $action = $this->request_m->insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark, $kd_req, $kd_stock, $kd_barang);
         if ($action) {
 			$response = array(
 				'status' => true,
