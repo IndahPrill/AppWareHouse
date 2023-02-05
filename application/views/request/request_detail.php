@@ -36,10 +36,10 @@
                                     <label for="">Tanggal Permintaan</label>
                                     <input type="text" class="form-control" id="date_req" readonly>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="">Supplier</label>
                                     <input type="text" class="form-control" id="nameSup" readonly>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="box-footer">
                                 <button class="btn btn-sm btn-primary" type="button" onclick="btnrRturn()"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Kembali</button>
@@ -138,7 +138,7 @@
 								</div>
                             </div>
                             <div class="form-group">
-                                <label for="remarkReq">Deskripsi <span style="font-size: 11px;">(Opsional)</span></label>
+                                <label for="remarkReq">Komentar</label>
                                 <textarea class="form-control" name="remarkReq" id="remarkReq" placeholder="Masukkan Deskripsi"></textarea>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
 								</div>
                             </div>
                             <div class="form-group">
-                                <label for="remarkBatal">Deskripsi <span style="font-size: 11px;">(Opsional)</span></label>
+                                <label for="remarkBatal">Komentar</label>
                                 <textarea class="form-control" name="remarkBatal" id="remarkBatal" placeholder="Masukkan Deskripsi"></textarea>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
 			dataType: "json",
 			async: false,
 			success: function(dt) {
-				console.log(dt.data)
+				// console.log(dt.data)
 				var date_req = "";
 
 				if (dt.data.date_req != "") {
@@ -251,7 +251,7 @@
 
 				$("#kd_req").val(dt.data.kd_req);
 				$("#date_req").val(date_req);
-				$("#nameSup").val(dt.data.name);
+				// $("#nameSup").val(dt.data.name);
 			}
 		})
 	}
@@ -272,7 +272,7 @@
 				let row = rows = "";
 				let sum = 0;
 				for (let i = 0; i < dt.data.length; i++) {
-					console.log(usr)
+					// console.log(usr)
 					if (dt.data[i].qty_req == '0') {
 						btnHideAcc = "disabled";
 						btnHideBtl = "disabled";
@@ -319,8 +319,8 @@
 					row += `</td>
 								<td>` + dt.data[i].qty_tot + `</td>
 								<td style="widt.datah: 15%; text-align: center;">
-									<button type="button" class="btn btn-xs btn-success" ` + btnHideAcc + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-kirimBarang"><i class="fa fa-plus-square"></i>&nbsp;&nbsp;Terima</button>&nbsp;
-									<button type="button" class="btn btn-xs btn-danger" ` + btnHideBtl + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `')" data-toggle="modal" data-target="#modal-batalBarang"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Batal</button>
+									<button type="button" class="btn btn-xs btn-success" ` + btnHideAcc + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `', '` + dt.data[i].kd_req + `', '` + dt.data[i].kd_stock + `', '` + dt.data[i].kd_barang + `')" data-toggle="modal" data-target="#modal-kirimBarang"><i class="fa fa-plus-square"></i>&nbsp;&nbsp;Terima</button>&nbsp;
+									<button type="button" class="btn btn-xs btn-danger" ` + btnHideBtl + ` onclick="getQtyBeli('` + dt.data[i].id_dtl_req + `', '` + dt.data[i].kd_req + `', '` + dt.data[i].kd_stock + `', '` + dt.data[i].kd_barang + `')" data-toggle="modal" data-target="#modal-batalBarang"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Batal</button>
 								</td>
 							</tr>`;
 					sum += parseInt(dt.data[i].qty_tot);
@@ -359,17 +359,19 @@
 		location.href = "<?= site_url('Request/req/getListReq') ?>";
 	}
 
-	function getQtyBeli(id_dtl_req) {
+	function getQtyBeli(id_dtl_req, kd_req, kd_stock, kd_barang) {
 		$.ajax({
 			type: "POST",
 			data: {
-				id_dtl_req: id_dtl_req
+				kd_barang: kd_barang,
+				kd_stock: kd_stock
 			},
 			url: "<?= site_url('Request/req/getQtyReq') ?>",
 			dataType: "json",
 			async: false,
 			success: function(dt) {
 				console.log(dt.data);
+				// return
 				$("#qtyReq").val(dt.data[0].qty_req);
 				$("#id_dtl_req").val(dt.data[0].id_dtl_req);
 				$("#qtyReqBtl").val(dt.data[0].qty_req);
@@ -421,7 +423,10 @@
 								id_dtl_req: id_dtl_req,
 								qtySendReq: qtySendReq,
 								dateSendReq: dateSendReq,
-								remarkReq: remarkReq
+								remarkReq: remarkReq,
+								kd_req: kd_req,
+								kd_stock: kd_stock, 
+								kd_barang: kd_barang
 							},
 							url: "<?= site_url('Request/req/insertReq') ?>",
 							dataType: "JSON",

@@ -36,6 +36,7 @@
                                     <label for="kodeBrg">Kode Barang</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="kodeBrg" id="kodeBrg" placeholder="Masukkan ..." autocomplete="off" readonly required>
+										<input type="hidden" name="kodeSto" id="kodeSto">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#list-kodebrg"><i class="fa fa-ellipsis-v"></i></button>
                                         </span>
@@ -142,12 +143,14 @@
                     <table class="table table-striped" id="tblKdBrg">
                         <thead>
                             <th>#</th>
+                            <th>Kode Stock</th>
                             <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Panjang</th>
                             <th>Lebar</th>
                             <th>Jenis</th>
                             <th>Tipe</th>
+                            <th>Qty</th>
                             <th>Aksi</th>
                         </thead>
                         <tbody id="dtKodeBrg">
@@ -175,7 +178,7 @@
 				<form id="formSaveBrg" method="post">
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="tglReqBrg">Tanggal</label>
+							<label for="tglReqBrg">Tanggal Permintaan</label>
 							<div class="input-group date">
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
@@ -183,12 +186,12 @@
 								<input type="text" class="form-control pull-right" id="tglReqBrg" name="tglReqBrg" placeholder="yyyy-mm-dd" required autocomplete="off">
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="kdSup">Pemasok</label>
 							<select class="form-control" id="kdSup" name="kdSup" required></select>
-						</div>
+						</div> -->
 						<div class="form-group">
-							<label for="remark">Komentar (Opsional)</label>
+							<label for="remark">Komentar</label>
 							<textarea class="form-control" id="remark" name="remark" placeholder="Masukkan ..." rows="2"></textarea>
 						</div>
 						<input type="hidden" name="kdReq" value="<?= $getKdReq; ?>">
@@ -281,6 +284,7 @@
 			},
 			submitHandler: function(form) {
 				let kodeReq = $("#kodeReq").val();
+				let kodeSto = $("#kodeSto").val();
 				let kodeBrg = $("#kodeBrg").val();
 				let nmBarang = $("#nmBarang").val();
 				let lengthSize = $("#lengthSize").val();
@@ -302,6 +306,7 @@
 						type: "POST",
 						data: {
 							kodeReq: kodeReq,
+							kodeSto: kodeSto,
 							kodeBrg: kodeBrg,
 							nmBarang: nmBarang,
 							lengthSize: lengthSize,
@@ -314,7 +319,7 @@
 						dataType: "JSON",
 						success: function(json) {
 							displayDetailBarang()
-							// $("#kodeReq").val("");
+							$("#kodeSto").val("");
 							$("#kodeBrg").val("");
 							$("#nmBarang").val("");
 							$("#lengthSize").val("");
@@ -333,12 +338,12 @@
 		$("#formSaveBrg").validate({
 			rules: {
 				tglReqBrg: "required",
-				kdSup: "required",
+				// kdSup: "required",
 				// remark: "required",
 			},
 			messages: {
 				tglReqBrg: "Tanggal Tidak Boleh Kosong",
-				kdSup: "Supplier Tidak Boleh Kosong",
+				// kdSup: "Supplier Tidak Boleh Kosong",
 				// remark: "Remark Tidak Boleh Kosong",
 			},
 			errorElement: 'span',
@@ -355,7 +360,7 @@
 			submitHandler: function(form) {
 				let kdReq = "<?= $getKdReq; ?>";
 				let tglReqBrg = $("#tglReqBrg").val();
-				let kdSup = $("#kdSup").val();
+				// let kdSup = $("#kdSup").val();
 				let remark = $("#remark").val();
 				let totalQty = $("#getTotalQty").val();
 
@@ -364,7 +369,7 @@
 					data: {
 						kdReq: kdReq,
 						tglReqBrg: tglReqBrg,
-						kdSup: kdSup,
+						// kdSup: kdSup,
 						remark: remark,
 						totalQty: totalQty
 					},
@@ -439,40 +444,45 @@
 			dataType: "JSON",
 			success: function (dt) {
 				console.log(dt.data)
-				let btnAdd = kode_barang = row = '';
+				let btnAdd = row = '';
 				for (let i = 0; i < dt.data.length; i++) {
-					var kode = (dt.data[i].kode < 10) ? '0'+dt.data[i].kode : dt.data[i].kode;
-					var sub_kode = (dt.data[i].sub_kode < 10) ? '0'+dt.data[i].sub_kode : dt.data[i].sub_kode;
-					var sub_data = (dt.data[i].sub_data < 10) ? '0'+dt.data[i].sub_data : dt.data[i].sub_data;
+					// var kode = (dt.data[i].kode < 10) ? '0'+dt.data[i].kode : dt.data[i].kode;
+					// var sub_kode = (dt.data[i].sub_kode < 10) ? '0'+dt.data[i].sub_kode : dt.data[i].sub_kode;
+					// var sub_data = (dt.data[i].sub_data < 10) ? '0'+dt.data[i].sub_data : dt.data[i].sub_data;
+					var kd_stock = (dt.data[i].kd_stock != "") ? dt.data[i].kd_stock : '-';
+					var kd_barang = (dt.data[i].kd_barang != "") ? dt.data[i].kd_barang : '-';
 					var nama_brg = (dt.data[i].nama_brg != "") ? dt.data[i].nama_brg : '-';
 					var length_size = (dt.data[i].length_size != "") ? dt.data[i].length_size : '-';
 					var width_size = (dt.data[i].width_size != "") ? dt.data[i].width_size : '-';
 					var lumber_type = (dt.data[i].lumber_type != "") ? dt.data[i].lumber_type : '-';
 					var species_type = (dt.data[i].species_type != "") ? dt.data[i].species_type : '-';
+					var tot_qty = (dt.data[i].tot_qty != "") ? dt.data[i].tot_qty : '-';
 
 					// console.log(nama_brg);
 
-					if (dt.data[i].sub_kode != "*") {
-						if (dt.data[i].sub_kode != '*' && dt.data[i].sub_data != '*') {
-							kode_barang = 'BRG' + kode + sub_kode + sub_data;
-							btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kode_barang + '\', \'' + nama_brg + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
-						} else {
-							kode_barang = 'BRG' + kode + sub_kode;
-							btnAdd = "";
-						}
-					} else {
-						kode_barang = 'BRG' + kode;
-						btnAdd = "";
-					}
+					btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kd_stock + '\', \'' + kd_barang + '\', \'' + nama_brg + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
+					// if (dt.data[i].sub_kode != "*") {
+					// 	if (dt.data[i].sub_kode != '*' && dt.data[i].sub_data != '*') {
+							// kode_barang = 'BRG' + kode + sub_kode + sub_data;
+						// } else {
+							// kode_barang = 'BRG' + kode + sub_kode;
+							// btnAdd = "";
+						// }
+					// } else {
+						// kode_barang = 'BRG' + kode;
+						// btnAdd = "";
+					// }
 
 					row += '<tr>' +
 								'<td>' + (i + 1) + '</td>' +
-								'<td>' + kode_barang + '</td>' +
+								'<td>' + kd_stock + '</td>' +
+								'<td>' + kd_barang + '</td>' +
 								'<td>' + nama_brg + '</td>' +
 								'<td>' + length_size + '</td>' +
 								'<td>' + width_size + '</td>' +
 								'<td>' + lumber_type + '</td>' +
 								'<td>' + species_type + '</td>' +
+								'<td>' + tot_qty + '</td>' +
 								'<td style="text-align: center;">' + btnAdd + '</td>' +
 							'</tr>';
 				}
@@ -481,7 +491,8 @@
 		})
 	}
 
-	function getDisplayData(kode_barang, nama_brg, length_size, width_size, lumber_type, species_type) {
+	function getDisplayData(kd_stock, kode_barang, nama_brg, length_size, width_size, lumber_type, species_type) {
+		$("#kodeSto").val(kd_stock);
 		$("#kodeBrg").val(kode_barang);
 		$("#nmBarang").val(nama_brg);
 		$("#lengthSize").val(length_size);

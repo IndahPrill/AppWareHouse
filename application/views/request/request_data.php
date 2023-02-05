@@ -40,7 +40,7 @@
 									<th>#</th>
 									<th>Kode</th>
 									<th>Tanggal</th>
-									<th>Pemasok</th>
+									<!-- <th>Pemasok</th> -->
 									<th>Status</th>
 									<th>Jumlah</th>
 									<th>&nbsp;</th>
@@ -150,7 +150,6 @@
 							<td>` + (i + 1) + `</td>
 							<td>` + dt.data[i].kd_req + `</td>
 							<td>` + date_req + `</td>
-							<td>` + dt.data[i].name + `</td>
 							<td style="widt.datah: 20%">`;
 
 						if (dt.data[i].qty_tot == dt.data[i].qty_req && dt.data[i].qty_confir == '0') {
