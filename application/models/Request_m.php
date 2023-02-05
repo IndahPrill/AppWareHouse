@@ -158,10 +158,10 @@ class Request_m extends CI_Model
 
 	public function delTmpReq($table, $idTemReq)
 	{
-		$data = $this->db->get_where($table, array('id_tem' => $idTem))->result_array();
+		$data = $this->db->get_where($table, array('id_tem_req' => $idTem))->result_array();
         if ($this->db->affected_rows() > 0) {
             activity_log("Tambah permintaan barang", "Delete", $data[0]["kd_req"]);
-            $action = $this->db->delete($table, array('id_tem' => $idTem));
+            $action = $this->db->delete($table, array('id_tem_req' => $idTem));
             return $action;
         } else {
             return false;

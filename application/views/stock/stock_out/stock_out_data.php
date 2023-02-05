@@ -26,7 +26,7 @@
                     <h3 class="box-title">Daftar Barang Keluar</h3>
                     <?php if($this->session->userdata('level') == 2){?>
                     <div class="pull-right">
-                        <a href="<?=site_url('stock/out/add')?>" class="btn btn-primary btn-flat">
+                        <a href="<?=site_url('stock/stock_out_add')?>" class="btn btn-primary btn-flat">
                             <i class="fa fa-plus"></i> Add Stock Out
                         </a>
                     </div>
@@ -34,19 +34,25 @@
                 </div>
 
                 <div class="box-body table-responsive">
-                    <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped" >
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Kode Barang</th>
-                                <th>Nama Barang</th>
-                                <th>Jumlah</th>
-                                <th>Tanggal</th>
-                                <th>Action</th>
+                                <th align="center" rowspan="2">#</th>
+                                <th align="center" rowspan="2">Tanggal Masuk</th>
+                                <th align="center" rowspan="2">Tanggal Keluar</th>
+                                <th align="center" rowspan="2">Kode Barang</th>
+                                <th align="center" rowspan="2">Nama Barang</th>
+                                <th align="center" colspan="2">Ukuran</th>
+                                <th align="center" colspan="2">Kayu</th>
+                                <th align="center" rowspan="2">Jumlah</th>
                             </tr>
+                                <th align="center">Panjang</th>
+                                <th align="center">Lebar</th>
+                                <th align="center">Tipe Kayu</th>
+                                <th align="center">Jumlah Kayu</th>
                         </thead>
                         <tbody>
-                            <?php $no = 1;
+                           <!-- <?php $no = 1;
                                 foreach($row as $key => $data) {?>
                             <tr>
                                 <td><?=$no++?></td>
@@ -55,14 +61,17 @@
                                 <td class="text-right"><?=$data->jumlah?></td>
                                 <td class="text-center"><?=indo_date($data->date)?></td>
                                 <td class="text-center" width="160px">
-                                    <a class="btn btn-default ">
+                                    <a class="btn btn-default " data-toggle="modal" data-target="#modal-deail"
+                                        data-kode="<?=$data->kode?>" data-itemname="<?=$data->nama_item?>"
+                                        data-suppliername="<?=$data->nama_supplier?>" data-jumlah="<?=$data->jumlah?>"
+                                        data-date="<?=indo_date($data->date)?>">
                                         <i class="fa fa-eye"></i> Detail
                                     </a>
                                     </form>
                                 </td>
                             </tr>
                             <?php 
-                                } ?>
+                                } ?>-->
                         </tbody>
 
                     </table>
