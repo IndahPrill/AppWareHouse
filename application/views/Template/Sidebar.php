@@ -6,11 +6,9 @@
                 <a href="<?= site_url('Dashboard/das') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
             </li>
             
-			<li <?= $this->uri->segment(2) == "sto" ? 'class="active"' : ''; ?> >
-                <a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-cube"></i> <span>Stock Barang</span></a>
-            </li>
+			
 
-			<!-- <li class="<?= $this->uri->segment(2) == "sto" ? 'active' : ''; ?> treeview">
+			<<li class="<?= $this->uri->segment(2) == "sto" ? 'active' : ''; ?> treeview">
                 <a href="#">
                     <i class="fa fa-cube"></i> <span>Stock Barang</span>
                     <span class="pull-right-container">
@@ -32,7 +30,7 @@
                     </li>
 					<?php } ?>
                 </ul>
-            </li> -->
+            </li> 
 
             <li class="<?= $this->uri->segment(2) == "req" ? 'active' : ''; ?> treeview">
                 <a href="#">
