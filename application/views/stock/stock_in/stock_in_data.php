@@ -48,15 +48,15 @@
                                 <th >Panjang</th>
                                 <th >Lebar</th>
                                 <th >Tipe Kayu</th>
-                                <th >Jumlah Kayu</th>
+           
                         </thead>
                         <tbody>
-                           <!-- <?php $no = 1;
+                            <!--<?php $no = 1;
                                 foreach($row as $key => $data) {?>
                             <tr>
                                 <td><?=$no++?></td>
-                                <td><?=$data->kode?></td>
-                                <td><?=$data->nama_item?></td>
+                                <td><?=$data->kode_barang?></td>
+                                <td><?=$data->nama_brg?></td>
                                 <td class="text-right"><?=$data->jumlah?></td>
                                 <td class="text-center"><?=indo_date($data->date)?></td>
                                 <td class="text-center" width="160px">
@@ -70,7 +70,7 @@
                                 </td>
                             </tr>
                             <?php 
-                                } ?>-->
+                                } ?>  -->  
                         </tbody>
 
                     </table>
