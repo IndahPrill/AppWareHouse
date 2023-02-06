@@ -14,6 +14,7 @@ class Supplier extends CI_Controller {
 	{
 		$data['title'] = "Supplier";
 		$data['row']=$this->supplier_m->get();
+		
 		$this->template->load('Template/HomePage', 'supplier/supplier_data', $data);
 	}
 
