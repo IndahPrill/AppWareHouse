@@ -61,9 +61,9 @@ $route['translate_uri_dashes']      = FALSE;
 
 $route['Dashboard/das']             = 'Dashboard/index';
 
-$route['Supplier/sup']              = 'Supplier/index';
-$route['Supplier/sup/getListSup']	= 'Supplier/getListSup';
-$route['Supplier/sup/createSup']	= 'Supplier/createSup';
+            
+$route['Supplier/sup/getListSup']	= 'Supplier/index';
+$route['Supplier/sup/createSup']	= 'Supplier/add';
 
 // Item
 $route['Item/itm/getListItm']       = 'Item/index';
@@ -98,5 +98,7 @@ $route['User/usr']                  = 'User/index';
 $route['Stock/in']          		= 'stock/stock_in_data';
 $route['Stock/in/add']      		= 'stock/stock_in_add'; 
 
+
 $route['Stock/out']         		= 'stock/stock_out_data';
 $route['Stock/out/add']     		= 'stock/stock_out_add'; 
+
