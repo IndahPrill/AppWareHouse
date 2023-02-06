@@ -1,3 +1,13 @@
+<div class="wrapper">
+    <!-- Navbar -->
+    <?php $this->load->view('Template/Navbar') ?>
+    <!-- Navbar -->
+
+    <!-- Sidebar-->
+    <?php $this->load->view('Template/Sidebar') ?>
+    <!-- Sidebar-->
+
+    <div class="content-wrapper">
 <section class="content-header">
       <h1>
        Users
@@ -74,3 +84,14 @@
           
     </div>
 </section>
+</div>
+
+<!-- Footer -->
+<?php $this->load->view('Template/Footer') ?>
+<!-- Footer -->
+
+</div>
+
+<!-- Footer -->
+<?php $this->load->view('Template/Script') ?>
+<!-- Footer -->

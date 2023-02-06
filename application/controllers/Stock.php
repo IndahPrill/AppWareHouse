@@ -14,7 +14,7 @@ class Stock extends CI_Controller {
 	public function getListStock()
 	{
 		$data['title'] = "Daftar Stock";
-
+		// $data['row'] = $this->stock_m->get();
 		$this->template->load('Template/HomePage', 'stock/daftar', $data);
 	}
 
@@ -45,9 +45,23 @@ class Stock extends CI_Controller {
 
     public function stock_in_add()
     {
-        $item = $this->item_m->get()->result();
-        $supplier = $this->supplier_m->get()->result();
-        $data = ['item' => $item, 'supplier' => $supplier];
+		$supplier = $this->supplier_m->get()->result();
+        $item = new stdClass();
+		$item->request_id = null;
+		$item->getKdReq = null;
+		$item->jenis = null;
+		$item->jumlah = null;
+		$item->keterangan = null;
+        $item->ukuran = null;
+        $item->date = null;
+        $item->status = null;
+		
+		$data = array(
+			'title' 	=> 'Tambah Permintaan Barang',
+			'page' 		=> 'add',
+			'row' 		=> $item,
+		
+		);
         $this->template->load('Template/HomePage', 'stock/stock_in/stock_in_form', $data);
     }
 
@@ -74,25 +88,6 @@ class Stock extends CI_Controller {
         }
     }
 
-	public function getMstrStock() 
-	{
-		$action = $this->request_m->getMstrStock();
-		if ($action) {
-			$response = array(
-				'status' => true,
-				'msg' => 'success',
-				'data' => $action
-			);
-		} else {
-			$response = array(
-				'status' => false,
-				'msg' => 'fail',
-				'data' => array()
-			);
-		}
-
-		echo json_encode($response);
-	}
 	
 	public function getTimeline() 
 	{
@@ -115,4 +110,5 @@ class Stock extends CI_Controller {
 
 		echo json_encode($response);
 	}
+ 
 }

@@ -14,6 +14,15 @@ class Supplier_m extends CI_Model
     }
 
 
+    public function getListSup()
+    {
+        $this->db->from('supplier');
+        
+        $query = $this->db->get();
+        return $query;
+    }
+
+
     public function add($post)
     {
         $params = 

@@ -26,7 +26,7 @@
                     <h3 class="box-title">Daftar Stok</h3>
                     <?php if($this->session->userdata('level') == 2){?>
                     <div class="pull-right">
-                        <a href="<?=site_url('stock/in/add')?>" class="btn btn-primary btn-flat">
+                        <a href="<?=site_url('stock/stock_in_add')?>" class="btn btn-primary btn-flat">
                             <i class="fa fa-plus"></i> Add Stock In
                         </a>
                     </div>
@@ -34,24 +34,29 @@
                 </div>
 
                 <div class="box-body table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" >
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Kode Barang</th>
-                                <th>Nama Barang</th>
-                                <th>Jumlah</th>
-                                <th>Tanggal</th>
-                                <th>Action</th>
+                                <th  rowspan="2">#</th>
+                                <th  rowspan="2">Tanggal</th>
+                                <th  rowspan="2">Kode Barang</th>
+                                <th  rowspan="2">Nama Barang</th>
+                                <th  colspan="2">Ukuran</th>
+                                <th  colspan="2">Kayu</th>
+                                <th  rowspan="2">Jumlah</th>
                             </tr>
+                                <th >Panjang</th>
+                                <th >Lebar</th>
+                                <th >Tipe Kayu</th>
+           
                         </thead>
                         <tbody>
-                            <?php $no = 1;
+                            <!--<?php $no = 1;
                                 foreach($row as $key => $data) {?>
                             <tr>
                                 <td><?=$no++?></td>
-                                <td><?=$data->kode?></td>
-                                <td><?=$data->nama_item?></td>
+                                <td><?=$data->kode_barang?></td>
+                                <td><?=$data->nama_brg?></td>
                                 <td class="text-right"><?=$data->jumlah?></td>
                                 <td class="text-center"><?=indo_date($data->date)?></td>
                                 <td class="text-center" width="160px">
@@ -65,7 +70,7 @@
                                 </td>
                             </tr>
                             <?php 
-                                } ?>
+                                } ?>  -->  
                         </tbody>
 
                     </table>
