@@ -1,0 +1,29 @@
+01.02.05 (Kode Barang)
+
+01 -> Kode
+02 -> Sub_kode
+05 -> Sub_data
+
+01.04
+
+mahoni 3
+Meja café 4
+R Sepatu 3
+
+kd_req
+op 
+1. milliseconds ex. 1674674804420
+2. yyyymmddnourut ex. 202301260001
+3. REQyymmddnourut ex. REQ2301260001
+
+REQ2301260001 mahoni 3
+REQ2301260001 Meja café 4
+REQ2301260001 R Sepatu 3
+REQ2301260002 R Sepatu 3
+
+git hub
+git merge didin
+git pull origin indah
+
+GDYYMMDDKODESUBKODESUBDATANOMORURUT
+GD2301280102020001
