@@ -55,22 +55,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Request -> class di controller
 | postReq -> fuction di dalam controller
 */
-$route['default_controller']        = 'Dashboard/index';
+$route['default_controller']        = 'auth/login';
+// $route['default_controller']        = 'Dashboard/index';
 $route['404_override']              = 'Dashboard/error404';
 $route['translate_uri_dashes']      = FALSE;
 
-$route['Dashboard/das']             = 'Dashboard/index';
+$route['Dashboard/das']             = 'Dashboard';
+$route['auth/process']              = 'auth/process';
 
             
-$route['Supplier/sup/getListSup']	= 'Supplier/index';
+$route['Supplier/sup/getListSup']	= 'Supplier';
 $route['Supplier/sup/createSup']	= 'Supplier/add';
 
 // Item
-$route['Item/itm/getListItm']       = 'Item/index';
+$route['Item/itm/getListItm']       = 'Item';
 $route['Item/itm/createItm']        = 'Item/add';
 
 // Request
-$route['Request/req/getListReq']    = 'Request/index';
+$route['Request/req/getListReq']    = 'Request';
 $route['Request/req/createReq']     = 'Request/add';
 $route['Request/req/getSupplier']	= 'Request/getSupplier';
 $route['Request/req/getMstrBrg']	= 'Request/getMstrBrg';
@@ -92,13 +94,9 @@ $route['Stock/sto/getListStock']	= 'Stock/getListStock';
 $route['Stock/sto/getTimeline']		= 'Stock/getTimeline';
 $route['Stock/sto/stockIn']			= 'Stock/stock_in_data';
 $route['Stock/sto/stockOut']		= 'Stock/stock_out_data';
+$route['Stock/sto/add']      		= 'Stock/stock_in_add'; 
+$route['Stock/sto/getMstrBrg']     	= 'Stock/getMstrBrg'; 
+$route['Stock/sto/postStock']     	= 'Stock/postStock'; 
 
-$route['User/usr']                  = 'User/index';
-
-$route['Stock/in']          		= 'stock/stock_in_data';
-$route['Stock/in/add']      		= 'stock/stock_in_add'; 
-
-
-$route['Stock/out']         		= 'stock/stock_out_data';
-$route['Stock/out/add']     		= 'stock/stock_out_add'; 
+$route['User/usr']                  = 'User';
 

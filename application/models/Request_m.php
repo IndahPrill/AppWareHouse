@@ -110,15 +110,15 @@ class Request_m extends CI_Model
 		// Ambil kode pembelian terbaru
         $qry2 = $this->db->query(
             "SELECT 
-                MAX(SUBSTR(kd_req, 10, 5)) AS kode,
-                SUBSTR(kd_req, 4, 2) AS day,
-                SUBSTR(kd_req, 6, 2) AS month,
-                SUBSTR(kd_req, 8, 2) as year
-            FROM m_request
-            WHERE 
-                SUBSTR(kd_req, 4, 2) = if( DAY(CURDATE()) < 10, CONCAT('0',DAY(CURDATE())),DAY(CURDATE()))
-                AND SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
-                AND SUBSTR(kd_req, 8, 2) = SUBSTR(YEAR(CURDATE()), 3,2)"
+				MAX(SUBSTR(kd_req, 10, 5)) AS kode,
+				SUBSTR(kd_req, 4, 2) AS day,
+				SUBSTR(kd_req, 6, 2) AS month,
+				SUBSTR(kd_req, 8, 2) as year
+			FROM m_request
+			WHERE 
+					SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
+					AND SUBSTR(kd_req, 4, 2) = SUBSTR(YEAR(CURDATE()), 3,2)
+				"
         )->result_array();
 
         $urutan = (int) $qry2[0]['kode'];
@@ -286,32 +286,34 @@ class Request_m extends CI_Model
 	{
 		$qry = "SELECT 
                     a.kd_req
-                    , a.kd_barang
+                    , b.kd_barang
 					, sum(b.qty_tot) qty_tot
 					, sum(b.qty_confir) qty_confir
 					, sum(b.qty_req) qty_req
-                    , b.supplier_id
+                    -- , b.supplier_id
                 FROM 
-					d_request a
-                    LEFT JOIN m_request b ON b.kd_req = a.kd_req
+					m_request a
+                    LEFT JOIN d_request b ON b.kd_req = a.kd_req
                 WHERE
                     a.is_active != ?
                     AND a.kd_req = ?";
         $res = $this->db->query($qry, array('1', $kd_req))->row();
 
+
         $kdBarang   = $res->kd_barang;
-        $supplierId = $res->supplier_id;
+        // $supplierId = $res->supplier_id;
         $qtyTot  	= $res->qty_tot;
         $qtyConfir  = $res->qty_confir;
         $qtyReq   	= $res->qty_req;
         $date_log 	= $dateCancel . " " . date("H:i:s");
 
+		// print_r($res); die;
         if ($qtyTot != '0' && $qtyConfir != '0' && $qtyReq == '0') {
             $this->db->where('kd_req', $kd_req);
-            $req = $this->db->update('m_request', array('status' => '1'));
+            $req = $this->db->update('m_request', array('is_active' => '1'));
             if ($req) {
                 if ($this->db->affected_rows() > 0) {
-                    activity_log_barang($date_log, $supplierId, $kd_req, $kdBarang, $qtyTot, $qtyConfir, $qtyReq, '0', $remarkCancel, '0');
+                    activity_log_barang($date_log, '', $kd_req, $kdBarang, $qtyTot, $qtyConfir, $qtyReq, '0', $remarkCancel, '0');
                     return true;
                 } else {
                     return false;
@@ -523,16 +525,21 @@ class Request_m extends CI_Model
 			'qty_confir'    => $qtyConfir,
 			'status_req'	=> $statusReq
 		);
-		$this->db->where('kd_req', $kd_req);
+
+		if($qty <= 0){
+			return 55;
+		}
+
 		$this->db->where('kd_stock', $kd_stock);
 		$this->db->where('kd_barang', $kd_barang);
-		$qry2 = $this->db->update('d_request', $data);
+		$qry3 = $this->db->update('m_stock', array('qty' => $qty));
 		
-		if ($qry2) {
+		if ($qry3) {
 			if ($this->db->affected_rows() > 0) {
+				$this->db->where('kd_req', $kd_req);
 				$this->db->where('kd_stock', $kd_stock);
 				$this->db->where('kd_barang', $kd_barang);
-				$qry3 = $this->db->update('m_stock', array('qty' => $qty));
+				$qry2 = $this->db->update('d_request', $data);
 
 				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, '0', $remark, $statusReq); // log barang
 				return true;
@@ -546,5 +553,110 @@ class Request_m extends CI_Model
         // } else {
         //     return false;
         // }
+	}
+
+	public function batalReq()
+	{
+		// Query Bindings
+        $qry = "SELECT 
+                    a.kd_pembelian
+                    , a.kd_barang
+                    , a.harga_beli
+                    , a.qty
+                    , a.qty_sisa
+                    , a.qty_gudang
+                    , a.qty_batal
+                    , c.kd_supplier
+                    , (
+                        SELECT persen_naik FROM kode_barang WHERE kode = SUBSTR(a.kd_barang, 1, 3) GROUP BY kode
+                    ) persen_naik
+                FROM detail_pembelian a
+                    LEFT JOIN kode_barang b ON b.kode = SUBSTR(a.kd_barang, 1, 3) AND a.status = b.status
+                    LEFT JOIN master_pembelian c ON a.kd_pembelian = c.kd_pembelian
+                WHERE
+                    a.status != ?
+                    AND id_detail = ?";
+        $getBatal = $this->db->query($qry, array('1', $id_detail))->row();
+
+        $kdPembelian    = $getBatal->kd_pembelian;
+        $kdBarang       = $getBatal->kd_barang;
+        $kdSupplier     = $getBatal->kd_supplier;
+        $hargaBeli      = $getBatal->harga_beli;
+        $qtyAwal        = $getBatal->qty;
+        $qtyBatal       = ($getBatal->qty_batal == 0) ? $qty : $getBatal->qty_batal + $qty;
+        $qtyGudang      = $getBatal->qty_gudang;
+        $qtySisa        = $getBatal->qty_sisa - $qty;
+        $totDetail      = ($qtyGudang == 0) ? $qtySisa * $hargaBeli : $qtyGudang * $hargaBeli;
+        $tglmasukcencel = $tgl . " " . date("H:i:s");
+        $dateNow        = date("Y-m-d H:i:s");
+
+        if ($qtyBatal != '0' && $qtyGudang != '0' && $qtySisa != '0') {
+            $statusBeli = '5'; // ada barang yang di batal dan barang masuk gudang
+        } else if ($qtyBatal != $qtyAwal && $qtySisa != '0') {
+            $statusBeli = '3'; // cencel sebagian
+        } else if ($qtyBatal == $qtyAwal && $qtySisa == '0') {
+            $statusBeli = '4'; // cencel semua barang
+        } else if ($qtyBatal != '0' && $qtyGudang != '0' && $qtySisa == '0') {
+            $statusBeli = '2'; // ada barang yang di batal dan barang masuk gudang
+        } else {
+            $statusBeli = '6'; // logika error
+        }
+
+        $data = array(
+            'qty_sisa'      => $qtySisa,
+            'qty_batal'     => $qtyBatal,
+            'status_beli'   => $statusBeli,
+            'total'         => $totDetail
+        );
+        $this->db->where('id_detail', $id_detail);
+        $updDetail = $this->db->update('detail_pembelian', $data);
+
+        if ($updDetail) {
+            $getqry = "SELECT 
+                            a.kd_pembelian
+                            , sum(b.qty_sisa) qty_sisa
+                            , sum(b.qty) qty
+                            , sum(b.total) total
+                        FROM 
+                            master_pembelian a
+                            LEFT JOIN detail_pembelian b ON a.kd_pembelian = b.kd_pembelian
+                        WHERE
+                            a.status != ?
+                            AND a.kd_pembelian = ?
+                        GROUP BY a.kd_pembelian";
+            $res = $this->db->query($getqry, array('1', $kdPembelian))->row();
+
+            $totPembelian = $res->total;
+
+            $data2 = array(
+                'total_pembelian' => $totPembelian,
+                'created_at' => $dateNow
+            );
+            $this->db->where('kd_pembelian', $kdPembelian);
+            $qry2 = $this->db->update('master_pembelian', $data2);
+
+            $data3 = array(
+                'kd_pembelian'  => $kdPembelian,
+                'kd_barang'     => $kdBarang,
+                'tgl_cencel'    => $tglmasukcencel,
+                'harga_beli'    => $hargaBeli,
+                'qty'           => $qty,
+                'created_at'    => $dateNow
+            );
+            $qry3 = $this->db->insert("master_barang_cencel", $data3);
+
+            if ($qry && $qry2 && $qry3) {
+                if ($this->db->affected_rows() > 0) {
+                    activity_log_barang($tglmasukcencel, $kdPembelian, $kdSupplier, $kdBarang, $qtySisa, '0', $qty, $remark, $statusBeli, '');
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
 	}
 }

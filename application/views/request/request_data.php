@@ -58,7 +58,7 @@
     <?php $this->load->view('Template/Footer') ?>
     <!-- Footer -->
 
-    <div class="modal fade" id="modal-cancel" data-keyboard="false" data-backdrop="static">
+    <div class="modal fade" id="modal-cencel" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-md">
 			<div class="overlay-wrapper">
 				<span id="loadingCencel"></span>
@@ -75,13 +75,13 @@
                                 <input type="text" class="form-control datetimepicker-input" name="tglcencel" id="tglcencel" data-toggle="datetimepicker" data-target="#datetimepicker5" placeholder="dd-mm-yyyy">
                             </div>
                             <div class="form-group">
-                                <label for="remarkCencel">Deskripsi <span style="font-size: 11px;">(Opsional)</span></label>
+                                <label for="remarkCencel">Komentar</label>
                                 <textarea class="form-control" name="remarkCencel" id="remarkCencel" placeholder="Masukkan Deskripsi"></textarea>
                             </div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
-							<button type="button" class="btn btn-primary" id="btnCencelSend">Simpan</button>
+							<button type="submit" class="btn btn-primary" id="btnCencelSend">Simpan</button>
 						</div>
 					</from>
 				</div>
@@ -94,6 +94,9 @@
 <!-- Footer -->
 <?php $this->load->view('Template/Script') ?>
 <!-- Footer -->
+
+<script src="<?= base_url() ?>assets/bower_components/jquery-validation/jquery.validate.min.js"></script>
+<script src="<?= base_url() ?>assets/bower_components/jquery-validation/additional-methods.min.js"></script>
 
 <script type="text/javascript">
 	$(function() {
@@ -111,6 +114,18 @@
 		$('#tglcencel').datepicker({
 			autoclose: true
 		})
+	})
+
+	const Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 3000,
+		timerProgressBar: true,
+		didOpen: (toast) => {
+			toast.addEventListener('mouseenter', Swal.stopTimer)
+			toast.addEventListener('mouseleave', Swal.resumeTimer)
+		}
 	})
 
 	function displayData() {
@@ -133,7 +148,7 @@
 						date_req = "";
 					}
 
-					if (dt.data[i].qty_tot == dt.data[i].qty_confir) {
+					if (dt.data[i].qty_tot == dt.data[i].qty_confir || dt.data[i].qty_confir != '0') {
 						btnHideDtl = "";
 						btnHideBtl = "disabled";
 					} else {
@@ -195,8 +210,8 @@
 	}
 
 	function cencelAll(kd_req) {
-
-		$("#formCencelMaster").validate({
+		console.log(kd_req)
+		$("#formCencel").validate({
 			rules: {
 				tglcencel: "required",
 				remarkCencel: "required",

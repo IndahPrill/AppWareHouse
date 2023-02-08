@@ -191,8 +191,8 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-sm btn-default" id="closeBtlBarang" data-dismiss="modal"><i class="fas fa-times"></i>&nbsp;&nbsp;Close</button>
-                            <button type="submit" class="btn btn-sm btn-primary" id="btlBarang"><i class="fas fa-share"></i>&nbsp;&nbsp;Send</button>
+                            <button type="button" class="btn btn-sm btn-default" id="closeBtlBarang" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Close</button>
+                            <button type="submit" class="btn btn-sm btn-primary" id="btlBarang"><i class="fa fa-share"></i>&nbsp;&nbsp;Send</button>
                         </div>
                     </form>
                 </div>
@@ -225,6 +225,11 @@
 		})
 
 		$('#dateSendReq').datepicker({
+			autoclose: true,
+			format: 'yyyy-dd-mm'
+		})
+		
+		$('#dateBtlReq').datepicker({
 			autoclose: true,
 			format: 'yyyy-dd-mm'
 		})
@@ -449,6 +454,16 @@
 										location.reload();
 									}, 3000);
 								} else {
+									if (res.data.num == "55") {
+										Toast.fire({
+											icon: 'error',
+											title: res.data.m
+										});
+										setInterval(function() {
+											location.reload();
+										}, 3000);
+										return
+									}
 									Toast.fire({
 										icon: 'error',
 										title: 'Gagal Simpan Permintaan Barang!'
