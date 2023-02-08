@@ -94,13 +94,9 @@ $route['Stock/sto/getListStock']	= 'Stock/getListStock';
 $route['Stock/sto/getTimeline']		= 'Stock/getTimeline';
 $route['Stock/sto/stockIn']			= 'Stock/stock_in_data';
 $route['Stock/sto/stockOut']		= 'Stock/stock_out_data';
+$route['Stock/sto/add']      		= 'Stock/stock_in_add'; 
+$route['Stock/sto/getMstrBrg']     	= 'Stock/getMstrBrg'; 
+$route['Stock/sto/postStock']     	= 'Stock/postStock'; 
 
 $route['User/usr']                  = 'User';
-
-$route['Stock/in']          		= 'stock/stock_in_data';
-$route['Stock/in/add']      		= 'stock/stock_in_add'; 
-
-
-$route['Stock/out']         		= 'stock/stock_out_data';
-$route['Stock/out/add']     		= 'stock/stock_out_add'; 
 

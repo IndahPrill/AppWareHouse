@@ -7,7 +7,7 @@ class Stock extends CI_Controller {
 	{
 		parent::__construct();
 		check_not_login();
-        $this->load->model(['item_m', 'supplier_m', 'stock_m']);
+        $this->load->model(['request_m', 'supplier_m', 'stock_m']);
 	
 	}
 
@@ -55,12 +55,13 @@ class Stock extends CI_Controller {
         $item->ukuran = null;
         $item->date = null;
         $item->status = null;
-		
+
+		$getKdSto = $this->stock_m->getKdSto();
 		$data = array(
-			'title' 	=> 'Tambah Permintaan Barang',
+			'title' 	=> 'Tambah Stock Barang',
 			'page' 		=> 'add',
 			'row' 		=> $item,
-		
+			'getKdSto'	=> $getKdSto
 		);
         $this->template->load('Template/HomePage', 'stock/stock_in/stock_in_form', $data);
     }
@@ -93,7 +94,7 @@ class Stock extends CI_Controller {
 	{
 		$kd_req 	= $this->input->post('kd_req');
 		$kd_barang 	= $this->input->post('kd_barang');
-		$action = $this->request_m->getTimeline($kd_req, $kd_barang);
+		$action = $this->stock_m->getTimeline($kd_req, $kd_barang);
 		if ($action) {
 			$response = array(
 				'status' => true,
@@ -110,5 +111,67 @@ class Stock extends CI_Controller {
 
 		echo json_encode($response);
 	}
- 
+
+	public function getMstrBrg()
+	{
+		$action = $this->request_m->getMstrBrg();
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
+	}
+	
+	public function postStock()
+	{
+		$kodeSto		= $this->input->post('kodeSto');
+        $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
+        $lengthSize		= $this->input->post('lengthSize');
+        $widthSize		= $this->input->post('widthSize');
+        $lumberType		= $this->input->post('lumberType');
+        $speciesType	= $this->input->post('speciesType');
+        $qtyReq			= $this->input->post('qtyReq');
+        $kdSup			= $this->input->post('kdSup');
+		
+		$data = array(
+            'supplier_id'	=> $kdSup,
+            'kd_stock'		=> $kodeSto,
+            'kd_barang'     => $kodeBrg,
+            'nama_brg'      => $nmBarang,
+            'length_size'	=> $lengthSize,
+            'width_size'	=> $widthSize,
+            'lumber_type'	=> $lumberType,
+            'species_type'	=> $speciesType,
+            'qty'			=> $qtyReq,
+        );
+
+		$action = $this->stock_m->postStock('m_stock', $data);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
+	}
+
 }

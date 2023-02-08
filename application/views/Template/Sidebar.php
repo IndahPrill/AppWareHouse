@@ -15,18 +15,18 @@
                 </a>
                 <ul class="treeview-menu">
 					<li <?= $this->uri->segment(3) == "getListStock" ? 'class="active"' : ''; ?> >
-						<a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-circle-o"></i> Daftar Stock</a>
+						<a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-circle-o"></i> Daftar</a>
 					</li>
 					<?php if ($this->session->userdata('level') <= 2) { ?>
                     <li <?= $this->uri->segment(3) == "stockIn" ? 'class="active"' : ''; ?> >
-                        <a href="<?= site_url('Stock/sto/stockIn') ?>"><i class="fa fa-circle-o"></i> Stock Masuk</a>
+                        <a href="<?= site_url('Stock/sto/add') ?>"><i class="fa fa-circle-o"></i> Tambah</a>
                     </li>
 					<?php } ?>
-					<?php if ($this->session->userdata('level') <= 2) { ?>
+					<!-- <?php if ($this->session->userdata('level') <= 2) { ?>
                     <li <?= $this->uri->segment(3) == "stockOut" ? 'class="active"' : ''; ?> >
                         <a href="<?= site_url('Stock/sto/stockOut') ?>"><i class="fa fa-circle-o"></i> Stock Keluar</a>
                     </li>
-					<?php } ?>
+					<?php } ?> -->
                 </ul>
             </li> 
 

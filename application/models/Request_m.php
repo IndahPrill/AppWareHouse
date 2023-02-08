@@ -110,15 +110,15 @@ class Request_m extends CI_Model
 		// Ambil kode pembelian terbaru
         $qry2 = $this->db->query(
             "SELECT 
-                MAX(SUBSTR(kd_req, 10, 5)) AS kode,
-                SUBSTR(kd_req, 4, 2) AS day,
-                SUBSTR(kd_req, 6, 2) AS month,
-                SUBSTR(kd_req, 8, 2) as year
-            FROM m_request
-            WHERE 
-                SUBSTR(kd_req, 4, 2) = if( DAY(CURDATE()) < 10, CONCAT('0',DAY(CURDATE())),DAY(CURDATE()))
-                AND SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
-                AND SUBSTR(kd_req, 8, 2) = SUBSTR(YEAR(CURDATE()), 3,2)"
+				MAX(SUBSTR(kd_req, 10, 5)) AS kode,
+				SUBSTR(kd_req, 4, 2) AS day,
+				SUBSTR(kd_req, 6, 2) AS month,
+				SUBSTR(kd_req, 8, 2) as year
+			FROM m_request
+			WHERE 
+					SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
+					AND SUBSTR(kd_req, 4, 2) = SUBSTR(YEAR(CURDATE()), 3,2)
+				"
         )->result_array();
 
         $urutan = (int) $qry2[0]['kode'];
