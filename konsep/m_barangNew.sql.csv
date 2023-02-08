@@ -1,0 +1,63 @@
+id_brg,kode,sub_kode,sub_data,nama_brg,length_size,width_size,lumber_type,species_type,is_active,created_at,created_by
+1,1,*,*,Barang Jadi,,,,,0,2023-01-04 21:10:22,system
+2,1,1,*,Kursi,,,,,0,2023-01-04 21:10:22,system
+3,1,1,1,Kursi Ukir Jepara,,,,Jati Emas,0,2023-01-04 21:10:22,system
+4,1,1,2,Sofa,,,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+5,1,1,3,Kursi Minimalis Cafe,,,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+6,1,1,4,Kursi fellow ,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+7,1,1,5,Kursi Zola,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+8,1,2,*,Meja,,,,,0,2023-01-04 21:10:22,system
+9,1,2,1,Meja Sudut,,,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+10,1,2,2,Meja minimalist square,,,,Kayu Cendana,0,2023-01-04 21:10:22,system
+11,1,2,3,Meja Makan Minimalis,,,,Kayu Cendana,0,2023-01-04 21:10:22,system
+12,1,2,4,Meja café,,,,Jati Emas,0,2023-01-04 21:10:22,system
+13,1,2,5,Meja Bufet Klasik T,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+14,1,3,*,Lemari,,,,,0,2023-01-04 21:10:22,system
+15,1,3,1,M Tiga Pintu Empat Laci,,,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+16,1,3,2,M New Duco,,,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+17,1,3,3,M Jati 2 Pintu,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+18,1,3,4,M Black plus kaca,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+19,1,3,5,M Sliding GESER ,,,,Jati Emas,0,2023-01-04 21:10:22,system
+20,1,4,*,Rak,,,,,0,2023-01-04 21:10:22,system
+21,1,4,1,R Sepatu ,,,,Kayu Cendana,0,2023-01-04 21:10:22,system
+22,1,4,2,R Dinding Hiasan ,,,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+23,1,4,3,R Buku,,,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+24,1,4,4,R Taman,,,,Kayu Mindi,0,2023-01-04 21:10:22,system
+25,1,4,5,R Piring Gantung,,,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+26,1,5,*,Kitchen Set,,,,,0,2023-01-04 21:10:22,system
+27,1,5,1,On Side,,,,Kayu Maghoni,0,2023-01-04 21:10:22,system
+28,1,5,2,Kabinet Kaca,,,,Kayu Cendana,0,2023-01-04 21:10:22,system
+29,1,5,3,Putih,,,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+30,1,5,4,Scandinavian,,,,Kayu Cendana,0,2023-01-04 21:10:22,system
+31,1,5,5,Klasik,,,,Kayu Maghoni,0,2023-01-04 21:10:22,system
+32,2,1,*,Jati Emas,,,,,0,2023-01-04 21:10:22,system
+33,2,1,1,Papan ,300,20,,Jati Emas,0,2023-01-04 21:10:22,system
+34,2,1,2,Kaso,400,6,,Jati Emas,0,2023-01-04 21:10:22,system
+35,2,1,3,Balok ,500,10,,Jati Emas,0,2023-01-04 21:10:22,system
+36,2,1,4,Reng,200,3,,Jati Emas,0,2023-01-04 21:10:22,system
+37,2,1,5,Tiang,300,18,,Jati Emas,0,2023-01-04 21:10:22,system
+38,2,2,*,Kayu Mindi,,,,,0,2023-01-04 21:10:22,system
+39,2,2,1,Papan ,200,20,,Kayu Mindi,0,2023-01-04 21:10:22,system
+40,2,2,2,Kaso,400,6,,Kayu Mindi,0,2023-01-04 21:10:22,system
+41,2,2,3,Balok ,200,12,,Kayu Mindi,0,2023-01-04 21:10:22,system
+42,2,2,4,Reng,50,3,,Kayu Mindi,0,2023-01-04 21:10:22,system
+43,2,2,5,Tiang,200,3,,kayu Mindi,0,2023-01-04 21:10:22,system
+44,2,3,*,Kayu Jati Belanda,,,,,0,2023-01-04 21:10:22,system
+45,2,3,1,Papan ,300,20,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+46,2,3,2,Kaso,120,4,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+47,2,3,3,Balok ,200,5,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+48,2,3,4,Reng,50,3,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+49,2,3,5,Tiang,300,18,,Kayu Jati Belanda,0,2023-01-04 21:10:22,system
+50,2,4,*,Kayu Mahogani,,,,,0,2023-01-04 21:10:22,system
+51,2,4,1,Papan ,300,20,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+52,2,4,2,Kaso,400,6,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+53,2,4,3,Balok ,500,10,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+54,2,4,4,Reng,100,3,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+55,2,4,5,Tiang,100,10,,Kayu Mahogani,0,2023-01-04 21:10:22,system
+56,2,5,*,Kayu Cendana,,,,,0,2023-01-04 21:10:22,system
+57,2,5,1,Papan ,200,20,,Kayu Cendana,0,2023-01-04 21:10:22,system
+58,2,5,2,Kaso,120,4,,Kayu Cendana,0,2023-01-04 21:10:22,system
+59,2,5,3,Balok ,200,5,,Kayu Cendana,0,2023-01-04 21:10:22,system
+60,2,5,4,Reng,100,3,,Kayu Cendana,0,2023-01-04 21:10:22,system
+61,2,5,5,Tiang,100,3,,Kayu Cendana,0,2023-01-04 21:10:22,system
+62,2,*,*,Barang Mentah,,,,,0,2023-01-04 21:10:22,system
