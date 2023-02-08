@@ -174,4 +174,24 @@ class Stock extends CI_Controller {
 		echo json_encode($response);
 	}
 
+	public function GetStock()
+	{
+		$action = $this->request_m->getMstrBrg();
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
+	}
+
 }

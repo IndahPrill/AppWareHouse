@@ -248,7 +248,7 @@
 					},
 					url: "<?= site_url('Stock/sto/postStock') ?>",
 					dataType: "JSON",
-					success: function(json) {
+					success: function(res) {
 						// displayDetailBarang()
 						$("#kodeSto").val("");
 						$("#kodeBrg").val("");
@@ -258,6 +258,24 @@
 						$("#lumberType").val("");
 						$("#speciesType").val("");
 						$("#qtyReq").val("");
+
+						if (res.status) {
+							Toast.fire({
+								icon: 'success',
+								title: 'Berhasil Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						} else {
+							Toast.fire({
+								icon: 'error',
+								title: 'Gagal Simpan Permintaan Barang!'
+							});
+							setInterval(function() {
+								location.reload();
+							}, 3000);
+						}
 					}
 				});
 
