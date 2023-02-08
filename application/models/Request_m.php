@@ -555,106 +555,70 @@ class Request_m extends CI_Model
         // }
 	}
 
-	public function batalReq()
+	public function batalReq($id_dtl_btl, $qty, $tgl, $remark)
 	{
 		// Query Bindings
         $qry = "SELECT 
-                    a.kd_pembelian
-                    , a.kd_barang
-                    , a.harga_beli
-                    , a.qty
-                    , a.qty_sisa
-                    , a.qty_gudang
-                    , a.qty_batal
-                    , c.kd_supplier
-                    , (
-                        SELECT persen_naik FROM kode_barang WHERE kode = SUBSTR(a.kd_barang, 1, 3) GROUP BY kode
-                    ) persen_naik
-                FROM detail_pembelian a
-                    LEFT JOIN kode_barang b ON b.kode = SUBSTR(a.kd_barang, 1, 3) AND a.status = b.status
-                    LEFT JOIN master_pembelian c ON a.kd_pembelian = c.kd_pembelian
-                WHERE
-                    a.status != ?
-                    AND id_detail = ?";
-        $getBatal = $this->db->query($qry, array('1', $id_detail))->row();
+					a.kd_req
+					, a.kd_stock
+					, a.kd_barang
+					, a.nama_brg
+					, a.length_size
+					, a.width_size
+					, a.lumber_type
+					, a.species_type
+					, a.qty_tot
+					, a.qty_confir
+					, a.qty_req
+					, a.qty_cancel
+					, a.is_active
+					, b.qty
+					, b.supplier_id
+				FROM d_request a
+					LEFT JOIN m_stock b ON a.kd_stock = b.kd_stock AND a.kd_barang = b.kd_barang 
+				WHERE
+					a.is_active != ?
+					AND a.id_dtl_req = ?
+				ORDER BY b.created_at";
+        $get = $this->db->query($qry, array('1', $id_dtl_btl))->row();
 
-        $kdPembelian    = $getBatal->kd_pembelian;
-        $kdBarang       = $getBatal->kd_barang;
-        $kdSupplier     = $getBatal->kd_supplier;
-        $hargaBeli      = $getBatal->harga_beli;
-        $qtyAwal        = $getBatal->qty;
-        $qtyBatal       = ($getBatal->qty_batal == 0) ? $qty : $getBatal->qty_batal + $qty;
-        $qtyGudang      = $getBatal->qty_gudang;
-        $qtySisa        = $getBatal->qty_sisa - $qty;
-        $totDetail      = ($qtyGudang == 0) ? $qtySisa * $hargaBeli : $qtyGudang * $hargaBeli;
-        $tglmasukcencel = $tgl . " " . date("H:i:s");
-        $dateNow        = date("Y-m-d H:i:s");
+		$kd_stock 		= $get->kd_stock;
+		$kd_req 		= $get->kd_req;
+		$supplier_id	= $get->supplier_id;
+		$kd_barang 		= $get->kd_barang;
+		$qtyTot 		= $get->qty_tot;
+		$qtyBatal 		= ($get->qty_cancel == 0) ? $qty : $get->qty_cancel + $qty;
+		$qtyReq 		= $get->qty_req - $qty;
+		$qtyConfir 		= $get->qty_confir;
+        $date_log 		= $tgl . " " . date("H:i:s");
 
-        if ($qtyBatal != '0' && $qtyGudang != '0' && $qtySisa != '0') {
-            $statusBeli = '5'; // ada barang yang di batal dan barang masuk gudang
-        } else if ($qtyBatal != $qtyAwal && $qtySisa != '0') {
-            $statusBeli = '3'; // cencel sebagian
-        } else if ($qtyBatal == $qtyAwal && $qtySisa == '0') {
-            $statusBeli = '4'; // cencel semua barang
-        } else if ($qtyBatal != '0' && $qtyGudang != '0' && $qtySisa == '0') {
-            $statusBeli = '2'; // ada barang yang di batal dan barang masuk gudang
+        if ($qtyBatal != '0' && $qtyReq != '0' && $qtyConfir != '0') {
+            $statusReq = '5'; // ada barang yang di batal dan barang masuk gudang
+        } else if ($qtyBatal != $qtyTot && $qtyConfir != '0') {
+            $statusReq = '3'; // cencel sebagian
+        } else if ($qtyBatal == $qtyTot && $qtyConfir == '0') {
+            $statusReq = '4'; // cencel semua barang
+        } else if ($qtyBatal != '0' && $qtyReq != '0' && $qtyConfir == '0') {
+            $statusReq = '2'; // ada barang yang di batal dan barang masuk gudang
         } else {
-            $statusBeli = '6'; // logika error
+            $statusReq = '6'; // logika error
         }
 
         $data = array(
-            'qty_sisa'      => $qtySisa,
-            'qty_batal'     => $qtyBatal,
-            'status_beli'   => $statusBeli,
-            'total'         => $totDetail
+            'qty_req'      	=> $qtyReq,
+            'qty_cancel'	=> $qtyBatal,
+            'status_req'	=> $statusReq
         );
-        $this->db->where('id_detail', $id_detail);
-        $updDetail = $this->db->update('detail_pembelian', $data);
+        $this->db->where('id_dtl_req', $id_dtl_btl);
+        $updDetail = $this->db->update('d_request', $data);
 
         if ($updDetail) {
-            $getqry = "SELECT 
-                            a.kd_pembelian
-                            , sum(b.qty_sisa) qty_sisa
-                            , sum(b.qty) qty
-                            , sum(b.total) total
-                        FROM 
-                            master_pembelian a
-                            LEFT JOIN detail_pembelian b ON a.kd_pembelian = b.kd_pembelian
-                        WHERE
-                            a.status != ?
-                            AND a.kd_pembelian = ?
-                        GROUP BY a.kd_pembelian";
-            $res = $this->db->query($getqry, array('1', $kdPembelian))->row();
-
-            $totPembelian = $res->total;
-
-            $data2 = array(
-                'total_pembelian' => $totPembelian,
-                'created_at' => $dateNow
-            );
-            $this->db->where('kd_pembelian', $kdPembelian);
-            $qry2 = $this->db->update('master_pembelian', $data2);
-
-            $data3 = array(
-                'kd_pembelian'  => $kdPembelian,
-                'kd_barang'     => $kdBarang,
-                'tgl_cencel'    => $tglmasukcencel,
-                'harga_beli'    => $hargaBeli,
-                'qty'           => $qty,
-                'created_at'    => $dateNow
-            );
-            $qry3 = $this->db->insert("master_barang_cencel", $data3);
-
-            if ($qry && $qry2 && $qry3) {
-                if ($this->db->affected_rows() > 0) {
-                    activity_log_barang($tglmasukcencel, $kdPembelian, $kdSupplier, $kdBarang, $qtySisa, '0', $qty, $remark, $statusBeli, '');
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+			if ($this->db->affected_rows() > 0) {
+				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, $qtyBatal, $remark, $statusReq); // log barang
+				return true;
+			} else {
+				return false;
+			}
         } else {
             return false;
         }

@@ -315,7 +315,7 @@ class Request extends CI_Controller {
         $tgl        = date("Y-m-d", strtotime($this->input->post('dateBtlReq')));
         $remark     = $this->input->post('remarkBatal');
 
-        $action = $this->request_m->batalReq($id_detail, $qty, $tgl, $remark);
+        $action = $this->request_m->batalReq($id_dtl_btl, $qty, $tgl, $remark);
         if ($action) {
 			$response = array(
 				'status' => true,

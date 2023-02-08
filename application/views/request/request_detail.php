@@ -513,6 +513,11 @@
 						let dateBtlReq = $("#dateBtlReq").val();
 						let remarkBatal = $("#remarkBatal").val();
 
+						console.log(id_dtl_btl)
+						console.log(qtyBatal)
+						console.log(dateBtlReq)
+						console.log(remarkBatal)
+
 						$.ajax({
 							type: "POST",
 							data: {
