@@ -37,6 +37,7 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="kodeBrg" id="kodeBrg" placeholder="Masukkan ..." autocomplete="off" readonly required>
 										<input type="hidden" name="kodeSto" id="kodeSto">
+										<input type="hidden" id="totStock">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#list-kodebrg"><i class="fa fa-ellipsis-v"></i></button>
                                         </span>
@@ -292,14 +293,15 @@
 				let lumberType = $("#lumberType").val();
 				let speciesType = $("#speciesType").val();
 				let qtyReq = $("#qtyReq").val();
+				let totStock = $("#totStock").val();
 
 				console.log("kodeBrg : " + kodeBrg);
 				console.log("nmBarang : " + nmBarang);
 
-				if (kodeBrg == "" && nmBarang == "") {
+				if (qtyReq > totStock) {
 					Toast.fire({
 						icon: 'error',
-						title: 'Kode barang dan Nama barang harus di pilih!'
+						title: 'Total Stock Tidak bisa minus'
 					});
 				} else {
 					$.ajax({
@@ -460,7 +462,7 @@
 
 					// console.log(nama_brg);
 
-					btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kd_stock + '\', \'' + kd_barang + '\', \'' + nama_brg + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\')"><i class="fa fa-plus"></i></button>';
+					btnAdd = '<button type="submit" class="btn btn-sm btn-success" onclick="getDisplayData(\'' + kd_stock + '\', \'' + kd_barang + '\', \'' + nama_brg + '\', \'' + length_size + '\', \'' + width_size + '\', \'' + lumber_type + '\', \'' + species_type + '\', \'' + tot_qty + '\')"><i class="fa fa-plus"></i></button>';
 					// if (dt.data[i].sub_kode != "*") {
 					// 	if (dt.data[i].sub_kode != '*' && dt.data[i].sub_data != '*') {
 							// kode_barang = 'BRG' + kode + sub_kode + sub_data;
@@ -491,8 +493,9 @@
 		})
 	}
 
-	function getDisplayData(kd_stock, kode_barang, nama_brg, length_size, width_size, lumber_type, species_type) {
+	function getDisplayData(kd_stock, kode_barang, nama_brg, length_size, width_size, lumber_type, species_type, tot_qty) {
 		$("#kodeSto").val(kd_stock);
+		$("#totStock").val(tot_qty);
 		$("#kodeBrg").val(kode_barang);
 		$("#nmBarang").val(nama_brg);
 		$("#lengthSize").val(length_size);

@@ -291,7 +291,7 @@ class Request extends CI_Controller {
 		$kd_barang		= $this->input->post('kd_barang');
 
         $action = $this->request_m->insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark, $kd_req, $kd_stock, $kd_barang);
-        if ($action) {
+        if ($action != 55) {
 			$response = array(
 				'status' => true,
 				'msg' => 'success',
@@ -301,7 +301,7 @@ class Request extends CI_Controller {
 			$response = array(
 				'status' => false,
 				'msg' => 'fail',
-				'data' => array()
+				'data' => array("num" => $action, "m"=>"Total Stock Tidak bisa minus")
 			);
 		}
 
