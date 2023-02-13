@@ -22,3 +22,6 @@
 <script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 <!-- Time active -->
 <script src="<?= base_url(); ?>assets/dist/js/custom/time.js"></script>
+<!-- moment js locales -->
+<script src="<?= base_url(); ?>assets/dist/js/custom/moment.js"></script>
+<script src="<?= base_url(); ?>assets/dist/js/custom/moment-with-locales.js"></script>

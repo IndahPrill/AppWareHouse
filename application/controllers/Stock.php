@@ -92,9 +92,9 @@ class Stock extends CI_Controller {
 	
 	public function getTimeline() 
 	{
-		$kd_req 	= $this->input->post('kd_req');
-		$kd_barang 	= $this->input->post('kd_barang');
-		$action = $this->stock_m->getTimeline($kd_req, $kd_barang);
+		$kd_stock = $this->input->post('kd_stock');
+		$action = $this->stock_m->getTimeline($kd_stock);
+		// print_r($action);
 		if ($action) {
 			$response = array(
 				'status' => true,

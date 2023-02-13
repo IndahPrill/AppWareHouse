@@ -252,3 +252,6 @@ ADD COLUMN `nama_brg` varchar(255) NOT NULL AFTER `kd_barang`;
 
 ALTER TABLE `task`.`activity_log_barang` 
 MODIFY COLUMN `kd_barang` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `supplier_id`;
+
+ALTER TABLE `task`.`activity_log_barang` 
+ADD COLUMN `status_in_out` int(11) NULL DEFAULT 0 AFTER `status_log`;
