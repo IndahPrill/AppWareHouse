@@ -24,13 +24,13 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Daftar Stok</h3>
-                    <?php if($this->session->userdata('level') == 2){?>
+                    <!-- <?php if($this->session->userdata('level') == 2){?>
                     <div class="pull-right">
                         <a href="<?=site_url('stock/in/add')?>" class="btn btn-primary btn-flat">
                             <i class="fa fa-plus"></i> Add Stock In
                         </a>
                     </div>
-                    <?php }?>
+                    <?php }?> -->
                 </div>
 
                 <div class="box-body table-responsive">

@@ -294,11 +294,8 @@
 				let speciesType = $("#speciesType").val();
 				let qtyReq = $("#qtyReq").val();
 				let totStock = $("#totStock").val();
-
-				console.log("kodeBrg : " + kodeBrg);
-				console.log("nmBarang : " + nmBarang);
-
-				if (qtyReq > totStock) {
+				
+				if (parseInt(qtyReq) > parseInt(totStock)) {
 					Toast.fire({
 						icon: 'error',
 						title: 'Total Stock Tidak bisa minus'
