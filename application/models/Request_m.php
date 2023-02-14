@@ -191,6 +191,8 @@ class Request_m extends CI_Model
 		)->result_array();
 
 		$dateNow = date("Y-m-d H:i:s");
+		// print_r($dateNow);
+		// die;
 
         $tglReq = $tglReqBrg . " " . date("H:i:s");
 
@@ -209,6 +211,7 @@ class Request_m extends CI_Model
                 'kd_req' 		=> $getTemReq[$i]['kd_req'],
                 'kd_stock' 		=> $getTemReq[$i]['kd_stock'],
                 'kd_barang'    	=> $getTemReq[$i]['kd_barang'],
+                'nama_brg'    	=> $getTemReq[$i]['nama_brg'],
                 'length_size'	=> $getTemReq[$i]['length_size'],
                 'length_size'	=> $getTemReq[$i]['length_size'],
                 'width_size'   	=> $getTemReq[$i]['width_size'],
@@ -227,26 +230,14 @@ class Request_m extends CI_Model
             if ($this->db->affected_rows() > 0) {
                 for ($i = 0; $i < count($getTemReq); $i++) {
 					// Insert to log
-                    activity_log_req(
-						$tglReq
-						, $kodeReq
-						, $getTemReq[$i]['kd_stock']
-						, $getTemReq[$i]['kd_barang']
-						, $getTemReq[$i]['length_size']
-						, $getTemReq[$i]['width_size']
-						, $getTemReq[$i]['lumber_type']
-						, $getTemReq[$i]['species_type']
-						, $getTemReq[$i]['qty']
-						, '0'
-						, $getTemReq[$i]['qty']
-						, '0'
-						, $remark
-						, '0');
+                    activity_log_req($tglReq, $kodeReq, $getTemReq[$i]['kd_stock'], $getTemReq[$i]['kd_barang'], $getTemReq[$i]['length_size'], $getTemReq[$i]['width_size'], $getTemReq[$i]['lumber_type'], $getTemReq[$i]['species_type'], $getTemReq[$i]['qty'], '0', $getTemReq[$i]['qty'], '0', $remark, '0');
+					activity_log_barang($tglReq, '0', $kodeReq, $getTemReq[$i]['kd_stock'], $getTemReq[$i]['kd_barang'], $getTemReq[$i]['qty'], '0', $getTemReq[$i]['qty'], '0', $remark, '0', '1'); // log barang
                 }
-            }
-
-            $this->db->delete("tem_req", array('kd_req' => $kodeReq)); // hapus data di tabel sementara
-            return true;
+				$this->db->delete("tem_req", array('kd_req' => $kodeReq)); // hapus data di tabel sementara
+				return true;
+            } else {
+				return false;
+			}
         } else {
             return false;
         }
@@ -312,7 +303,7 @@ class Request_m extends CI_Model
             $req = $this->db->update('m_request', array('is_active' => '1'));
             if ($req) {
                 if ($this->db->affected_rows() > 0) {
-                    activity_log_barang($date_log, '', $kd_req, $kdBarang, $qtyTot, $qtyConfir, $qtyReq, '0', $remarkCancel, '0');
+                    activity_log_barang($date_log, '', $kd_req, $kdBarang, $qtyTot, $qtyConfir, $qtyReq, '0', $remarkCancel, '0', '1');
                     return true;
                 } else {
                     return false;
@@ -365,30 +356,6 @@ class Request_m extends CI_Model
 					, a.status_req
 				FROM
 					d_request a
-					-- LEFT JOIN (
-					-- 	SELECT  
-					-- 		CASE 
-					-- 			WHEN kode < 10 THEN
-					-- 				CONCAT('0',kode)
-					-- 			ELSE
-					-- 				kode
-					-- 		END AS kode
-					-- 		, CASE 
-					-- 			WHEN sub_kode < 10 THEN
-					-- 				CONCAT('0',sub_kode)
-					-- 			ELSE
-					-- 				sub_kode
-					-- 		END AS sub_kode
-					-- 		, CASE 
-					-- 			WHEN sub_data < 10 THEN
-					-- 				CONCAT('0',sub_data)
-					-- 			ELSE
-					-- 				sub_data
-					-- 		END AS sub_data
-					-- 		, nama_brg
-					-- 	FROM m_barang
-					-- 	WHERE is_active != '1'
-					-- ) b ON concat('BRG',b.kode,b.sub_kode,b.sub_data) = a.kd_barang
 				WHERE
 					a.is_active != ?
 					AND a.kd_req = ?";
@@ -540,7 +507,7 @@ class Request_m extends CI_Model
 				$this->db->where('kd_barang', $kd_barang);
 				$qry2 = $this->db->update('d_request', $data);
 
-				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, '0', $remark, $statusReq); // log barang
+				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, '0', $remark, $statusReq, '1'); // log barang
 				return true;
 			} else {
 				return false;
@@ -548,10 +515,6 @@ class Request_m extends CI_Model
 		} else {
 			return false;
 		}
-        // if ($insert) {
-        // } else {
-        //     return false;
-        // }
 	}
 
 	public function batalReq($id_dtl_btl, $qty, $tgl, $remark)
@@ -613,7 +576,7 @@ class Request_m extends CI_Model
 
         if ($updDetail) {
 			if ($this->db->affected_rows() > 0) {
-				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, $qtyBatal, $remark, $statusReq); // log barang
+				activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qtyTot, $qtyConfir, $qtyReq, $qtyBatal, $remark, $statusReq, '1'); // log barang
 				return true;
 			} else {
 				return false;

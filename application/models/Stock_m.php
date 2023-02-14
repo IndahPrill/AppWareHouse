@@ -84,21 +84,48 @@ class Stock_m extends CI_Model
         $this->db->insert('stock', $params);
     }
 
-	public function getTimeline($kd_req, $kd_barang)
+	public function getTimeline($kd_stock)
 	{
 		$qry = $this->db->query(
-			"SELECT * FROM activity_log_barang 
+			"SELECT
+				date_log
+				, supplier_id
+				, kd_req
+				, kd_stock
+				, kd_barang
+				, qty_tot
+				, qty_confir
+				, qty_req
+				, qty_cancel
+				, remark
+				, status_log
+				, status_in_out
+			FROM activity_log_barang 
 			WHERE 
-					kd_req = '$kd_req'
-					AND kd_barang = '$kd_barang'
+				kd_stock = '$kd_stock'
 			ORDER BY date_log DESC"
 		)->result_array();
+
+		$arry = array(); 
+		for ($x=0; $x < count($qry) ; $x++) { 
+			$data = array(
+				'date_log' => $qry[$x]['date_log'],
+				'supplier_id' => $qry[$x]['supplier_id'],
+				'kd_req' => $qry[$x]['kd_req'],
+				'kd_stock' => $qry[$x]['kd_stock'],
+				'kd_barang' => $qry[$x]['kd_barang'],
+				'qty_tot' => $qry[$x]['qty_tot'],
+				'qty_confir' => $qry[$x]['qty_confir'],
+				'qty_req' => $qry[$x]['qty_req'],
+				'qty_cancel' => $qry[$x]['qty_cancel'],
+				'remark' => $qry[$x]['remark'],
+				'status_log' => $qry[$x]['status_log'],
+				'status_in_out' => $qry[$x]['status_in_out']
+			);
+			array_push($arry, $data);
+		}
 		
-		if ($qry) {
-            return $qry;
-        } else {
-            return false;
-        }
+		return $qry;
 	}
 
 	public function postStock($table, $data)

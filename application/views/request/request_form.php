@@ -224,6 +224,13 @@
 		displayDetailBarang()
 		getDataSupplier()
 
+		let totalQty = $("#getTotalQty").val();
+		if (totalQty == "0") {
+			$("#saveReqBrg").prop("disabled",true);
+		} else {
+			$("#saveReqBrg").prop("disabled",false);
+		}
+
 		$("#tblReqBrg").DataTable({
 			"responsive": true,
 			"autoWidth": false,
@@ -238,9 +245,14 @@
 			"lengthMenu": [5, 10, 20, 50],
 		})
 
+		let start = moment().format("YYYY-MM-DD");
+		let end = moment().add(14, 'days').format("YYYY-MM-DD");
+
 		$('#tglReqBrg').datepicker({
+			startDate: start,
+			endDate: end,
 			autoclose: true,
-			format: 'yyyy-dd-mm'
+			format: 'yyyy-mm-dd'
 		})
 
 		$("#formBarang").validate({
@@ -294,11 +306,11 @@
 				let speciesType = $("#speciesType").val();
 				let qtyReq = $("#qtyReq").val();
 				let totStock = $("#totStock").val();
-				
+        
 				if (parseInt(qtyReq) > parseInt(totStock)) {
 					Toast.fire({
 						icon: 'error',
-						title: 'Total Stock Tidak bisa minus'
+						title: 'Total Stock Tidak boleh minus'
 					});
 				} else {
 					$.ajax({
@@ -547,6 +559,13 @@
 						</tr>`;
 				$('#dtReqBrg').html(row);
 				$('#totReqBrg').html(rows);
+
+				let totalQty = $("#getTotalQty").val();
+				if (totalQty == "0") {
+					$("#saveReqBrg").prop("disabled",true);
+				} else {
+					$("#saveReqBrg").prop("disabled",false);
+				}
 			}
 		});
 		return false;

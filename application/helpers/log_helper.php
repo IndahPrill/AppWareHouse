@@ -10,7 +10,7 @@ function activity_log_req($date_log, $kd_req, $kd_stock, $kd_barang, $length_siz
 
     $param = array(
         'date_log'      => $date_log,
-        'user_id'		=> $CI->session->userdata('name'),
+        'user_id'		=> $CI->session->userdata('user_id'),
         'kd_req'		=> $kd_req,
         'kd_stock'   	=> $kd_stock,
         'kd_barang'     => $kd_barang,
@@ -33,7 +33,7 @@ function activity_log_req($date_log, $kd_req, $kd_stock, $kd_barang, $length_siz
     $CI->Activity_log->posTmpReq($param);
 }
 
-function activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qty_tot, $qty_confir, $qty_req, $qty_cancel, $remark, $status_log)
+function activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_barang, $qty_tot, $qty_confir, $qty_req, $qty_cancel, $remark, $status_log, $status_in_out)
 {
     $CI = &get_instance();
     if ($date_log == "") {
@@ -42,7 +42,7 @@ function activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_ba
 
     $param = array(
         'date_log'      => $date_log,
-        'user_id'		=> $CI->session->userdata('name'),
+        'user_id'		=> $CI->session->userdata('user_id'),
         'supplier_id'	=> $supplier_id,
         'kd_req'		=> $kd_req,
         'kd_stock'   	=> $kd_stock,
@@ -52,7 +52,8 @@ function activity_log_barang($date_log, $supplier_id, $kd_req, $kd_stock, $kd_ba
         'qty_req'		=> $qty_req,
         'qty_cancel'    => $qty_cancel,
         'remark'        => $remark,
-        'status_log'	=> $status_log
+        'status_log'	=> $status_log,
+        'status_in_out'	=> $status_in_out
     );
 
     //load model log
