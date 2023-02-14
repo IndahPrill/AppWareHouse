@@ -51,7 +51,7 @@
            
                         </thead>
                         <tbody>
-                            <!--<?php $no = 1;
+                            <!-- <?php $no = 1;
                                 foreach($row as $key => $data) {?>
                             <tr>
                                 <td><?=$no++?></td>
@@ -70,7 +70,7 @@
                                 </td>
                             </tr>
                             <?php 
-                                } ?>  -->  
+                                } ?>    -->
                         </tbody>
 
                     </table>

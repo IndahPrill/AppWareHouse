@@ -306,7 +306,7 @@
 				let speciesType = $("#speciesType").val();
 				let qtyReq = $("#qtyReq").val();
 				let totStock = $("#totStock").val();
-
+        
 				if (parseInt(qtyReq) > parseInt(totStock)) {
 					Toast.fire({
 						icon: 'error',
