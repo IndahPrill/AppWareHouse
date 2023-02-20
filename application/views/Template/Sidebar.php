@@ -18,7 +18,7 @@
 						<a href="<?= site_url('Stock/sto/getListStock') ?>"><i class="fa fa-circle-o"></i> Daftar</a>
 					</li>
 					<?php if ($this->session->userdata('level') <= 2) { ?>
-                    <li <?= $this->uri->segment(3) == "stockIn" ? 'class="active"' : ''; ?> >
+                    <li <?= $this->uri->segment(3) == "add" ? 'class="active"' : ''; ?> >
                         <a href="<?= site_url('Stock/sto/add') ?>"><i class="fa fa-circle-o"></i> Tambah</a>
                     </li>
 					<?php } ?>

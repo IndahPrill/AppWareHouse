@@ -71,7 +71,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="dtReqBrg">
-                                        <tr>
+                                        <!-- <tr>
                                             <td>1</td>
                                             <td>Meja Bundar</td>
                                             <td></td>
@@ -84,13 +84,13 @@
                                                 <button class="btn btn-xs btn-success"><i class="fa fa-trash"></i>&nbsp;&nbsp;Terima&nbsp;&nbsp;</button>
                                                 <button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;Batal&nbsp;&nbsp;</button>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                     <tfoot id="totReqBrg">
-                                        <tr>
+                                        <!-- <tr>
                                             <td colspan="7" style="text-align: right;"><b>Total Jumlah</b></td>
                                             <td colspan="2" style="text-align: left;"><b>20</b></td>
-                                        </tr>
+                                        </tr> -->
                                     </tfoot>
                                 </table>
                             </div>
@@ -218,20 +218,28 @@
 		displayData()
 
 		$("#tblListReq").DataTable({
-			"responsive": true,
+			"responsive": true, 
 			"autoWidth": false,
 			"pageLength": 10,
 			"lengthMenu": [5, 10, 20, 50],
 		})
 
+		let start = moment().format("YYYY-MM-DD");
+		let end = moment().add(14, 'days').format("YYYY-MM-DD");
+
 		$('#dateSendReq').datepicker({
+			startDate: start,
+			endDate: end,
 			autoclose: true,
-			format: 'yyyy-dd-mm'
+			format: 'yyyy-mm-dd'
 		})
 		
+		
 		$('#dateBtlReq').datepicker({
+			startDate: start,
+			endDate: end,
 			autoclose: true,
-			format: 'yyyy-dd-mm'
+			format: 'yyyy-mm-dd'
 		})
 	})
 
@@ -368,7 +376,7 @@
 		$.ajax({
 			type: "POST",
 			data: {
-				kd_barang: kd_barang,
+				kd_req: kd_req,
 				kd_stock: kd_stock
 			},
 			url: "<?= site_url('Request/req/getQtyReq') ?>",
@@ -463,14 +471,15 @@
 											location.reload();
 										}, 3000);
 										return
+									} else {
+										Toast.fire({
+											icon: 'error',
+											title: 'Gagal Simpan Permintaan Barang!'
+										});
+										setInterval(function() {
+											location.reload();
+										}, 3000);
 									}
-									Toast.fire({
-										icon: 'error',
-										title: 'Gagal Simpan Permintaan Barang!'
-									});
-									setInterval(function() {
-										location.reload();
-									}, 3000);
 								}
 							}
 						});

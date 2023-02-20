@@ -12,3 +12,8 @@ jarangan melebihi 13
 == sama dengan
 
 jika jumlah permintaaan lebih dari Jumlah Stock 
+
+0 < 0
+
+-1
+0

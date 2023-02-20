@@ -369,7 +369,7 @@ class Request_m extends CI_Model
 	}
 
 	// public function getQtyReq($id_dtl_req, $kd_req, $kd_stock, $kd_barang)
-	public function getQtyReq($kd_stock, $kd_barang)
+	public function getQtyReq($kd_stock, $kd_req)
 	{
 		$qry = $this->db->query(
 			"SELECT 
@@ -387,7 +387,7 @@ class Request_m extends CI_Model
 				) b ON a.kd_stock = b.kd_stock AND a.kd_barang = b.kd_barang 
 			WHERE
 				a.kd_stock = '$kd_stock'
-				AND a.kd_barang = '$kd_barang'
+				AND a.kd_req = '$kd_req'
 			"
 		)->result_array();
 
@@ -400,28 +400,6 @@ class Request_m extends CI_Model
 
 	public function insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark, $kd_req, $kd_stock, $kd_barang)
 	{
-		// $qry = $this->db->query(
-        //     "SELECT 
-        //         MAX(SUBSTR(kd_req, 10, 5)) AS kode,
-        //         SUBSTR(kd_req, 4, 2) AS day,
-        //         SUBSTR(kd_req, 6, 2) AS month,
-        //         SUBSTR(kd_req, 8, 2) as year
-        //     FROM m_stock
-        //     WHERE 
-        //         SUBSTR(kd_req, 4, 2) = if( DAY(CURDATE()) < 10, CONCAT('0',DAY(CURDATE())),DAY(CURDATE()))
-        //         AND SUBSTR(kd_req, 6, 2) = if( MONTH(CURDATE()) < 10, CONCAT('0',MONTH(CURDATE())),MONTH(CURDATE()))
-        //         AND SUBSTR(kd_req, 8, 2) = SUBSTR(YEAR(CURDATE()), 3,2)"
-        // )->result_array();
-
-        // $urutan = (int) $qry[0]['kode'];
-        // $urutan++;
-
-        // $kode		= "STK";
-        // $day        = date("d");
-        // $month      = date("m");
-        // $year       = substr(date("Y"), 2, 2);
-        // $kdStock   	= $kode . $day . $month . $year . sprintf("%04s", $urutan);
-
         // Query Bindings
         $qry = "SELECT 
 					a.kd_req
@@ -437,10 +415,27 @@ class Request_m extends CI_Model
 					, a.qty_req
 					, a.qty_cancel
 					, a.is_active
-					, b.qty
+					, SUM(b.qtysum) qtysum
+					, b.qty 
 					, b.supplier_id
+					, b.id_stock
 				FROM d_request a
-					LEFT JOIN m_stock b ON a.kd_stock = b.kd_stock AND a.kd_barang = b.kd_barang 
+					LEFT JOIN (
+						SELECT
+							id_stock,
+							sum(qty) qtysum,
+							qty,
+							supplier_id,
+							kd_stock,
+							kd_barang,
+							created_at
+						FROM
+							m_stock
+						GROUP BY
+							kd_barang
+						ORDER BY
+							created_at ASC 
+					) b ON a.kd_stock = b.kd_stock AND a.kd_barang = b.kd_barang 
 				WHERE
                     a.is_active != ?
                     AND a.kd_req = ?
@@ -452,29 +447,17 @@ class Request_m extends CI_Model
 		$date_log 	= $dateSendReq . " " . date("H:i:s");
         $dateNow	= date("Y-m-d H:i:s");
 
-        // $data = array(
-        //     'supplier_id'		=> $get->supplier_id,
-        //     'kd_req'			=> $get->kd_req,
-        //     'kd_barang'         => $get->kd_barang,
-        //     'nama_brg'  		=> $get->nama_brg,
-		// 	'length_size'		=> $get->length_size,
-		// 	'width_size'		=> $get->width_size,
-		// 	'lumber_type'		=> $get->lumber_type,
-		// 	'species_type'		=> $get->species_type,
-		// 	'qty'				=> $qtySendReq,
-        //     'created_at'        => $dateNow
-        // );
-
-        // $insert = $this->db->insert("m_stock", $data);
-
+		$id_stock 		= $get->id_stock;
 		$kd_req 		= $get->kd_req;
 		$supplier_id	= $get->supplier_id;
 		$kd_barang 		= $get->kd_barang;
+		$qtySto 		= $get->qty;
 		$qtyTot 		= $get->qty_tot;
 		$qtyBatal 		= $get->qty_cancel;
 		$qtyReq 		= $get->qty_req - $qtySendReq;
 		$qtyConfir 		= $get->qty_confir + $qtySendReq;
-		$qty	 		= $get->qty - $qtySendReq;
+		$qtysum	 		= (int)$get->qtysum - (int)$qtySendReq;
+		// $qty	 		= (int)$get->qty - (int)$qtySendReq;
 
 		if ($qtyBatal != '0' && $qtyReq != '0' && $qtyConfir != '0') {
 			$statusReq = '5'; // ada barang yang di batal dan barang masuk gudang
@@ -486,22 +469,50 @@ class Request_m extends CI_Model
 			$statusReq = '6'; // logika error
 		}
 
-		$data = array(
-			'qty_req'		=> $qtyReq,
-			'qty_confir'    => $qtyConfir,
-			'status_req'	=> $statusReq
-		);
-
-		if($qty <= 0){
+		if($qtysum < 0){
 			return 55;
 		}
 
-		$this->db->where('kd_stock', $kd_stock);
-		$this->db->where('kd_barang', $kd_barang);
-		$qry3 = $this->db->update('m_stock', array('qty' => $qty));
+		$cekDt = $this->db->query(
+			"SELECT 
+				a.id_stock,
+				a.qty,
+				a.supplier_id,
+				a.kd_stock,
+				a.is_active,
+				a.created_at
+			FROM
+				m_stock a
+			WHERE 
+				a.is_active != '1'
+				AND a.kd_barang = '$kd_barang'
+			ORDER BY a.created_at"
+			)->result();
 		
-		if ($qry3) {
+		$qty_proses = $qtySendReq;
+		$updAct = false;
+		if($cekDt){
+			foreach ($cekDt as $d) {
+				if ($qty_proses > $d->qty) {
+					// update saldo stok menjadi 0 jika jumlah order lebih dari saldo stok
+					$updAct = $this->update_stok(array('qty' => 0, 'is_active' => '1'), array('id_stock' => $d->id_stock));
+					$qty_proses = $qty_proses - $d->qty;
+				} else {
+					// kurangi saldo stok jika jumlah order kurang dari atau sama dengan saldo stok
+					$updAct = $this->update_stok(array('qty' => $d->qty - $qty_proses), array('id_stock' => $d->id_stock));
+					$order = 0;
+					break;
+				}
+			}
+		}
+		
+		if ($updAct) {
 			if ($this->db->affected_rows() > 0) {
+				$data = array(
+					'qty_req'		=> $qtyReq,
+					'qty_confir'    => $qtyConfir,
+					'status_req'	=> $statusReq
+				);
 				$this->db->where('kd_req', $kd_req);
 				$this->db->where('kd_stock', $kd_stock);
 				$this->db->where('kd_barang', $kd_barang);
@@ -516,6 +527,12 @@ class Request_m extends CI_Model
 			return false;
 		}
 	}
+
+	public function update_stok($data, $where) {
+		$this->db->where($where);
+        $this->db->update('m_stock',$data);
+        return $this->db->affected_rows();
+    }
 
 	public function batalReq($id_dtl_btl, $qty, $tgl, $remark)
 	{
