@@ -155,6 +155,9 @@ class Stock extends CI_Controller {
             'species_type'	=> $speciesType,
             'qty'			=> $qtyReq,
         );
+		// print_r($data);
+		// die();
+
 
 		$action = $this->stock_m->postStock('m_stock', $data);
 
@@ -176,7 +179,7 @@ class Stock extends CI_Controller {
 
 	public function GetStock()
 	{
-		$action = $this->request_m->getMstrBrg();
+		$action = $this->stock_m->GetStock();
 
 		if ($action) {
 			$response = array(

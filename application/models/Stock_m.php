@@ -130,11 +130,56 @@ class Stock_m extends CI_Model
 
 	public function postStock($table, $data)
 	{
+        $dateNow = date('Y-m-d H:i:s');
 		$insert = $this->db->insert($table, $data);
         if ($insert) {
+            activity_log_barang($dateNow, $data['supplier_id'], "", $data['kd_stock'], $data['kd_barang'], $data['qty'], '0', '0', '0', "", '0', '2');
             return $insert;
         } else {
             return false;
         }
+	}
+
+    public function GetStock()
+	{
+		$qry = $this->db->query(
+			"SELECT
+				a.kd_stock,
+				a.kd_barang,
+				-- SUM(a.qty) tot_qty,
+                a.qty tot_qty,
+				a.nama_brg,
+				a.length_size,
+				a.width_size,
+				a.lumber_type,
+				a.species_type
+			FROM
+				m_stock a
+			-- WHERE
+			-- 	a.is_active != '1' 
+			-- 	AND a.qty > 0
+			-- GROUP BY 
+			-- 	a.kd_barang
+			ORDER BY
+				a.created_at
+			"
+		)->result_array();
+
+		$response = [];
+		foreach ($qry as $val) {
+			$data = array(
+				'kd_stock'		=> $val['kd_stock'],
+				'kd_barang'		=> $val['kd_barang'],
+				'tot_qty' 		=> $val['tot_qty'],
+				'nama_brg'		=> $val['nama_brg'],
+				'length_size' 	=> $val['length_size'],
+				'width_size' 	=> $val['width_size'],
+				'lumber_type' 	=> $val['lumber_type'],
+				'species_type' 	=> $val['species_type'],
+			);
+			array_push($response, $data);
+		}
+
+        return $response;
 	}
 }

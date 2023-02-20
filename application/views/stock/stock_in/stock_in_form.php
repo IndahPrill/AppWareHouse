@@ -353,7 +353,7 @@
 	}
 
 	function getDisplayData(kd_stock, kode_barang, nama_brg, length_size, width_size, lumber_type, species_type) {
-		$("#kodeSto").val(kd_stock);
+		// $("#kodeSto").val(kd_stock);
 		$("#kodeBrg").val(kode_barang);
 		$("#nmBarang").val(nama_brg);
 		$("#lengthSize").val(length_size);

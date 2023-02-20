@@ -258,10 +258,10 @@ class Request extends CI_Controller {
 	{
 		// $id_dtl_req	= $this->input->post('id_dtl_req');
 		$kd_stock	= $this->input->post('kd_stock');
-		// $kd_req		= $this->input->post('kd_req');
-		$kd_barang	= $this->input->post('kd_barang');
+		$kd_req		= $this->input->post('kd_req');
+		// $kd_barang	= $this->input->post('kd_barang');
 		// $action 	= $this->request_m->getQtyReq($id_dtl_req, $kd_req, $kd_stock, $kd_barang);
-		$action 	= $this->request_m->getQtyReq($kd_stock, $kd_barang);
+		$action 	= $this->request_m->getQtyReq($kd_stock, $kd_req);
 
 		if ($action) {
 			$response = array(
@@ -291,7 +291,7 @@ class Request extends CI_Controller {
 		$kd_barang		= $this->input->post('kd_barang');
 
         $action = $this->request_m->insertReq($id_dtl_req, $qtySendReq, $dateSendReq, $remark, $kd_req, $kd_stock, $kd_barang);
-        if ($action != 55) {
+        if ($action != 55 || $action == true) {
 			$response = array(
 				'status' => true,
 				'msg' => 'success',
