@@ -18,6 +18,8 @@ class Stock extends CI_Controller {
 		$this->template->load('Template/HomePage', 'stock/daftar', $data);
 	}
 
+	
+
     public function stock_in_data()
     {
         $data['title'] = "Stock In";
@@ -41,6 +43,55 @@ class Stock extends CI_Controller {
         // $data = ['item' => $item, 'supplier' => $supplier];
         $data = ['item' => '', 'supplier' => ''];
         $this->template->load('Template/HomePage', 'stock/stock_out/stock_out_form', $data);
+    }
+
+	public function stock_add_raw()
+    {
+        $item = new stdClass();
+		$item->jenis = null;
+		$item->jumlah = null;
+		$item->keterangan = null;
+        $item->ukuran = null;
+        $item->date = null;
+		
+		$getKdSto = $this->stock_m->getKdSto();
+		
+		$data = array(
+			'title' 	=> 'Tambah Barang Baru',
+			'page' 		=> 'add',
+			'row' 		=> $item,
+			'getKdSto'	=> $getKdSto
+		);
+        $this->template->load('Template/HomePage', 'stock/stock_add_raw', $data);
+    }
+
+	public function stock_add_done()
+    {
+        $item = new stdClass();
+		$item->jenis = null;
+		$item->jumlah = null;
+		$item->keterangan = null;
+        $item->ukuran = null;
+        $item->date = null;
+
+		$getKdSto = $this->stock_m->getKdSto();
+		
+		$data = array(
+			'title' 	=> 'Tambah Barang Jadi',
+			'page' 		=> 'add',
+			'row' 		=> $item,
+			'getKdSto'	=> $getKdSto
+		);
+        $this->template->load('Template/HomePage', 'stock/stock_add_done', $data);
+    }
+	public function add_choice()
+    {
+		$data = array(
+			'title' 	=> 'Pilih Mode',
+			'page' 		=> 'add',
+			
+		);
+        $this->template->load('Template/HomePage', 'stock/add_choice', $data);
     }
 
     public function stock_in_add()
@@ -67,7 +118,7 @@ class Stock extends CI_Controller {
     }
 
 
-    public function process() 
+    /*public function process() 
 	{
         if(isset($_POST['in_add'])){
             $post = $this->input->post(null, TRUE);
@@ -87,7 +138,7 @@ class Stock extends CI_Controller {
                 }
                 redirect('stock/out');	
         }
-    }
+    }*/
 
 	
 	public function getTimeline() 
@@ -132,6 +183,85 @@ class Stock extends CI_Controller {
 		echo json_encode($response);
 	}
 	
+	public function postItem()
+	{
+		$kodeSto		= $this->input->post('kodeSto');
+        $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
+        $lengthSize		= $this->input->post('lengthSize');
+        $widthSize		= $this->input->post('widthSize');
+        $lumberType		= $this->input->post('lumberType');
+        $speciesType	= $this->input->post('speciesType');
+       
+		
+		$data = array(
+			'kd_stock'		=> $kodeSto,
+            'kd_barang'     => $kodeBrg,
+            'nama_brg'      => $nmBarang,
+            'length_size'	=> $lengthSize,
+            'width_size'	=> $widthSize,
+            'lumber_type'	=> $lumberType,
+            'species_type'	=> $speciesType,
+           
+        );
+
+		$action = $this->stock_m->postItem('m_stock', $data);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
+	}
+
+
+	public function postItems()
+	{
+		$kodeSto		= $this->input->post('kodeSto');
+        $kodeBrg		= $this->input->post('kodeBrg');
+        $nmBarang		= $this->input->post('nmBarang');
+        $lengthSize		= $this->input->post('lengthSize');
+        $widthSize		= $this->input->post('widthSize');
+        $speciesType	= $this->input->post('speciesType');
+       
+		
+		$data = array(
+			'kd_stock'		=> $kodeSto,
+            'kd_barang'     => $kodeBrg,
+            'nama_brg'      => $nmBarang,
+            'length_size'	=> $lengthSize,
+            'width_size'	=> $widthSize,
+            'species_type'	=> $speciesType,
+           
+        );
+
+		$action = $this->stock_m->postItems('m_stock', $data);
+
+		if ($action) {
+			$response = array(
+				'status' => true,
+				'msg' => 'success',
+				'data' => $action
+			);
+		} else {
+			$response = array(
+				'status' => false,
+				'msg' => 'fail',
+				'data' => array()
+			);
+		}
+		echo json_encode($response);
+	}
+
 	public function postStock()
 	{
 		$kodeSto		= $this->input->post('kodeSto');
@@ -145,6 +275,7 @@ class Stock extends CI_Controller {
         $kdSup			= $this->input->post('kdSup');
 		
 		$data = array(
+			
             'supplier_id'	=> $kdSup,
             'kd_stock'		=> $kodeSto,
             'kd_barang'     => $kodeBrg,

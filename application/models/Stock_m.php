@@ -70,6 +70,37 @@ class Stock_m extends CI_Model
         $this->db->insert('stock', $params);
     }
 
+    public function stock_add_raw($post)
+    {
+        $supplier = $this->supplier_m->get()->result();
+        $params = 
+        [
+            'item_id' => $post['nama'],
+            'type' => 'in',
+            'detail' => $post['detail'],
+            'jumlah' => $post['jml'],
+            'date' => $post['date'],
+            'user_id' => $this->session->userdata('userid'),
+        ];
+        $this->db->insert('stock', $params);
+    }
+
+    public function stock_add_done($post)
+    {
+        $supplier = $this->supplier_m->get()->result();
+        $params = 
+        [
+            'item_id' => $post['nama'],
+            'type' => 'in',
+            'detail' => $post['detail'],
+            'jumlah' => $post['jml'],
+            'date' => $post['date'],
+            'user_id' => $this->session->userdata('userid'),
+        ];
+        $this->db->insert('stock', $params);
+    }
+
+
     public function add_stock_out($post)
     {
         $params = 
@@ -102,6 +133,26 @@ class Stock_m extends CI_Model
 	}
 
 	public function postStock($table, $data)
+	{
+		$insert = $this->db->insert($table, $data);
+        if ($insert) {
+            return $insert;
+        } else {
+            return false;
+        }
+	}
+
+    public function postItem($table, $data)
+	{
+		$insert = $this->db->insert($table, $data);
+        if ($insert) {
+            return $insert;
+        } else {
+            return false;
+        }
+	}
+
+    public function postItems($table, $data)
 	{
 		$insert = $this->db->insert($table, $data);
         if ($insert) {

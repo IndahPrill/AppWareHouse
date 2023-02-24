@@ -97,7 +97,12 @@ $route['Stock/sto/stockOut']		= 'Stock/stock_out_data';
 $route['Stock/sto/add']      		= 'Stock/stock_in_add'; 
 $route['Stock/sto/getMstrBrg']     	= 'Stock/getMstrBrg'; 
 $route['Stock/sto/postStock']     	= 'Stock/postStock'; 
+$route['Stock/sto/postItem']     	= 'Stock/postItem'; 
+$route['Stock/sto/postItems']     	= 'Stock/postItems'; 
 $route['Stock/sto/GetStock']     	= 'Stock/GetStock'; 
+$route['Stock/sto/addRaw']			= 'Stock/stock_add_raw';
+$route['Stock/sto/addDone']			= 'Stock/stock_add_done';
+$route['Stock/sto/Choice']			= 'Stock/add_choice';
 
 $route['User/usr']                  = 'User';
 

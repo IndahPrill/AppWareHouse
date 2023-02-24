@@ -72,12 +72,12 @@
                                     </thead>
                                     <tbody id="dtReqBrg">
                                         <tr>
-                                            <td>1</td>
-                                            <td>Meja Bundar</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>Kayu Mahogani</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td><span class="badge badge-info">Pengiriman</span> [20/20/5/0] <button type="button" class="btn btn-xs btn-default" data-toggle="popover" title="Rincian Jumlah" data-content="Total = 15 <br> Total Sisa = 0" data-trigger="focus" onclick=""><i class="fa fa-info-circle"></i></button></td>
                                             <td>5</td>   
                                             <td>

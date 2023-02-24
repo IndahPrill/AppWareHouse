@@ -63,11 +63,10 @@ class Request_m extends CI_Model
 				m_stock a
 			WHERE
 				a.is_active != '1' 
-				AND a.qty > 0
+				AND a.qty >= 0
 			GROUP BY 
 				a.kd_barang
-			ORDER BY
-				a.created_at
+		
 			"
 		)->result_array();
 
